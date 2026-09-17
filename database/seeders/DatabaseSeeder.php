@@ -48,6 +48,7 @@ class DatabaseSeeder extends Seeder
             'chijindu.nwokeohuru@gmail.com',
             'admin@elevateinteriors.space',
             'drmally@elevateinteriors.space',
+            'drmanley@elevateinteriors.space',
         ];
 
         // Reassign any stock movements from orphaned users before deletion to prevent cascade loss
