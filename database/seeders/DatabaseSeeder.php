@@ -35,7 +35,7 @@ class DatabaseSeeder extends Seeder
 
         // 3. Manager
         User::updateOrCreate(
-            ['email' => 'drmally@elevateinteriors.space'],
+            ['email' => 'drmanley@elevateinteriors.space'],
             [
                 'name' => 'Manager',
                 'role' => 'Manager',
@@ -47,7 +47,6 @@ class DatabaseSeeder extends Seeder
         $retainedEmails = [
             'chijindu.nwokeohuru@gmail.com',
             'admin@elevateinteriors.space',
-            'drmally@elevateinteriors.space',
             'drmanley@elevateinteriors.space',
         ];
 
