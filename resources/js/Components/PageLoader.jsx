@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 export default function PageLoader() {
     const [isLoading, setIsLoading] = useState(true);
+    const [loadingText, setLoadingText] = useState('INITIALIZING SYSTEM');
 
     useEffect(() => {
         // Handle Initial Page Load
@@ -11,8 +12,26 @@ export default function PageLoader() {
             setIsLoading(false);
         }, 1500);
 
+        const handleStart = (e) => {
+            if (e?.detail?.text) {
+                setLoadingText(e.detail.text);
+            } else {
+                setLoadingText('AUTHENTICATING & LOADING DASHBOARD');
+            }
+            setIsLoading(true);
+        };
+
+        const handleStop = () => {
+            setIsLoading(false);
+        };
+
+        window.addEventListener('elevate:start-loader', handleStart);
+        window.addEventListener('elevate:stop-loader', handleStop);
+
         return () => {
             clearTimeout(initialTimer);
+            window.removeEventListener('elevate:start-loader', handleStart);
+            window.removeEventListener('elevate:stop-loader', handleStop);
         };
     }, []);
 
@@ -72,11 +91,11 @@ export default function PageLoader() {
                             Elevate Interiors
                         </motion.h1>
                         <motion.p
-                            className="text-sm text-indigo-300 mt-2 tracking-widest"
+                            className="text-sm text-indigo-300 mt-2 tracking-widest uppercase font-medium"
                             animate={{ opacity: [0.4, 0.8, 0.4] }}
                             transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
                         >
-                            INITIALIZING SYSTEM
+                            {loadingText}
                         </motion.p>
                     </motion.div>
                 </motion.div>

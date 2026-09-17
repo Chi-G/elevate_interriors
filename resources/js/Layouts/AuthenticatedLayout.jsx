@@ -2,7 +2,9 @@ import { useState, useEffect } from 'react';
 import Sidebar from '@/Layouts/Sidebar';
 import Dropdown from '@/Components/Dropdown';
 import ApplicationLogo from '@/Components/ApplicationLogo';
+import DataSyncLoader from '@/Components/DataSyncLoader';
 import { usePage } from '@inertiajs/react';
+import { PanelLeftClose, PanelLeftOpen, RefreshCw } from 'lucide-react';
 import Swal from 'sweetalert2';
 
 const Toast = Swal.mixin({
@@ -14,9 +16,38 @@ const Toast = Swal.mixin({
 });
 
 export default function AuthenticatedLayout({ header, children }) {
-    const { auth, flash } = usePage().props;
+    const { auth, flash, url } = usePage().props;
+    const currentUrl = usePage().url;
     const user = auth?.user;
     const [sidebarOpen, setSidebarOpen] = useState(false);
+    const [sidebarCollapsed, setSidebarCollapsed] = useState(() => {
+        if (typeof window !== 'undefined') {
+            return localStorage.getItem('sidebar_collapsed') === 'true';
+        }
+        return false;
+    });
+
+    // 2-Second Demo Database Animation State
+    const [isDataLoading, setIsDataLoading] = useState(true);
+
+    useEffect(() => {
+        setIsDataLoading(true);
+        const timer = setTimeout(() => {
+            setIsDataLoading(false);
+        }, 2000);
+
+        return () => clearTimeout(timer);
+    }, [currentUrl]);
+
+    const toggleSidebarCollapse = () => {
+        setSidebarCollapsed((prev) => {
+            const next = !prev;
+            if (typeof window !== 'undefined') {
+                localStorage.setItem('sidebar_collapsed', String(next));
+            }
+            return next;
+        });
+    };
 
     if (!user) {
         return null; // Fallback during session transition
@@ -65,22 +96,42 @@ export default function AuthenticatedLayout({ header, children }) {
     return (
         <div className="min-h-screen bg-slate-50 flex font-sans transition-colors duration-300">
             {/* Sidebar Desktop & Mobile */}
-            <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+            <Sidebar
+                isOpen={sidebarOpen}
+                onClose={() => setSidebarOpen(false)}
+                isCollapsed={sidebarCollapsed}
+                onToggleCollapse={toggleSidebarCollapse}
+            />
 
             <div className="flex-1 flex flex-col min-w-0 h-screen overflow-hidden">
                 {/* Header Navbar */}
                 <header className="h-16 bg-white border-b border-slate-200 flex items-center px-4 sm:px-6 lg:px-8 shrink-0 z-10 w-full relative sm:drop-shadow-sm justify-between transition-colors">
-                    {/* Mobile Menu Button */}
+                    {/* Sidebar Buttons & Page Title */}
                     <div className="flex items-center">
+                        {/* Mobile Menu Button */}
                         <button
                             onClick={() => setSidebarOpen(!sidebarOpen)}
                             className="md:hidden p-2 -ml-2 rounded-md text-slate-400 hover:text-slate-500 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                            aria-label="Open navigation menu"
                         >
                             <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
                             </svg>
                         </button>
 
+                        {/* Desktop Sidebar Collapse Toggle */}
+                        <button
+                            onClick={toggleSidebarCollapse}
+                            className="hidden md:inline-flex items-center justify-center p-2 -ml-2 mr-2 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"
+                            title={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+                            aria-label={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+                        >
+                            {sidebarCollapsed ? (
+                                <PanelLeftOpen className="h-5 w-5" />
+                            ) : (
+                                <PanelLeftClose className="h-5 w-5" />
+                            )}
+                        </button>
 
                         {/* Page title injected from props or just use header */}
                         {header && (
@@ -90,7 +141,21 @@ export default function AuthenticatedLayout({ header, children }) {
                         )}
                     </div>
 
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-3">
+                        {/* Demo Database Sync Trigger Button */}
+                        <button
+                            type="button"
+                            onClick={() => {
+                                setIsDataLoading(true);
+                                setTimeout(() => setIsDataLoading(false), 2000);
+                            }}
+                            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-slate-600 hover:text-indigo-600 bg-slate-100 hover:bg-indigo-50 border border-slate-200 hover:border-indigo-200 rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm"
+                            title="Run 2-Second Live Database Sync Demo Animation"
+                        >
+                            <RefreshCw className={`w-3.5 h-3.5 ${isDataLoading ? 'animate-spin text-indigo-600' : 'text-slate-400'}`} />
+                            <span>Demo 2s Sync</span>
+                        </button>
+
                         {/* Top Right Profile Dropdown */}
                         <div className="relative">
                             <Dropdown>
@@ -134,7 +199,10 @@ export default function AuthenticatedLayout({ header, children }) {
                 )}
 
                 <main className="flex-1 overflow-y-auto w-full relative bg-slate-50 pb-10 transition-colors">
-                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                    {/* 2-Second Demo Database Sync Loader */}
+                    <DataSyncLoader isLoading={isDataLoading} title={header || 'Database Records'} />
+
+                    <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 transition-all duration-500 ${isDataLoading ? 'opacity-0 pointer-events-none translate-y-3' : 'opacity-100 translate-y-0'}`}>
                         {children}
                     </div>
                 </main>

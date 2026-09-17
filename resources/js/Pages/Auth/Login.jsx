@@ -28,7 +28,23 @@ export default function Login({ status, canResetPassword }) {
     const submit = (e) => {
         e.preventDefault();
 
+        const startTime = Date.now();
+        window.dispatchEvent(new CustomEvent('elevate:start-loader', {
+            detail: { text: 'AUTHENTICATING & LOADING DASHBOARD...' }
+        }));
+
         post(route('login'), {
+            onSuccess: () => {
+                const elapsed = Date.now() - startTime;
+                const remaining = Math.max(0, 2000 - elapsed);
+
+                setTimeout(() => {
+                    window.dispatchEvent(new CustomEvent('elevate:stop-loader'));
+                }, remaining);
+            },
+            onError: () => {
+                window.dispatchEvent(new CustomEvent('elevate:stop-loader'));
+            },
             onFinish: () => reset('password'),
         });
     };

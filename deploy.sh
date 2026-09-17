@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Elevate Interiors - Production Deployment Script
-# Target: forahia.com/inventory
+# Elevate Interiors - Production Deployment & Optimization Script
+# Target: elevateinteriors.space (Railway / Docker)
 
 echo "🚀 Starting Post-Deployment Tasks..."
 

@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreSupplierRequest;
+use App\Http\Requests\UpdateSupplierRequest;
 use App\Models\Supplier;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class SupplierController extends Controller
@@ -11,9 +12,9 @@ class SupplierController extends Controller
     public function index($slug = null)
     {
         $this->authorize('suppliers.view');
-        
+
         return Inertia::render('Catalog/Suppliers/Index', [
-            'suppliers' => Supplier::all()
+            'suppliers' => Supplier::all(),
         ]);
     }
 
@@ -22,34 +23,16 @@ class SupplierController extends Controller
         return redirect()->route('suppliers.index', ['slug' => auth()->user()->slug]);
     }
 
-    public function store(Request $request, $slug = null)
+    public function store(StoreSupplierRequest $request, $slug = null)
     {
-        $this->authorize('suppliers.create');
-
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'contact_person' => 'nullable|string|max:255',
-            'email' => 'nullable|email|max:255',
-            'phone' => 'nullable|string|max:20',
-        ]);
-
-        Supplier::create($validated);
+        Supplier::create($request->validated());
 
         return redirect()->back()->with('success', 'Supplier created successfully.');
     }
 
-    public function update(Request $request, Supplier $supplier, $slug = null)
+    public function update(UpdateSupplierRequest $request, Supplier $supplier, $slug = null)
     {
-        $this->authorize('suppliers.edit');
-
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'contact_person' => 'nullable|string|max:255',
-            'email' => 'nullable|email|max:255',
-            'phone' => 'nullable|string|max:20',
-        ]);
-
-        $supplier->update($validated);
+        $supplier->update($request->validated());
 
         return redirect()->back()->with('success', 'Supplier updated successfully.');
     }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Actions\Inventory\RecordStockMovementAction;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
@@ -52,26 +53,14 @@ class Product extends Model
      */
     public function adjustStock(int $absoluteQuantity, string $type, ?string $notes = null, ?int $userId = null, ?int $supplierId = null)
     {
-        // Enforce quantity constraints based on type
-        $quantity = match ($type) {
-            'IN' => abs($absoluteQuantity),
-            'OUT' => -abs($absoluteQuantity),
-            'ADJUSTMENT' => $absoluteQuantity,
-            default => throw new \InvalidArgumentException("Invalid stock movement type: {$type}"),
-        };
-
-        // Prevent Stock-Outs that result in negative stock
-        if ($type === 'OUT' && ($this->current_stock + $quantity < 0)) {
-            throw new \Exception('Insufficient stock to process this Stock-Out transaction.');
-        }
-
-        return $this->stockMovements()->create([
-            'quantity' => $quantity,
-            'type' => $type,
-            'notes' => $notes,
-            'user_id' => $userId ?? auth()->id(),
-            'supplier_id' => $supplierId,
-        ]);
+        return app(RecordStockMovementAction::class)->execute(
+            product: $this,
+            quantity: $absoluteQuantity,
+            type: $type,
+            notes: $notes,
+            userId: $userId,
+            supplierId: $supplierId
+        );
     }
 
     /**

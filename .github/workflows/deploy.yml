@@ -1,73 +1,67 @@
-name: Verified Production Deployment
+name: CI & Railway Production Deployment
 
 on:
   push:
     branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
-  deploy:
-    name: Build and Deploy
+  ci-test-and-build:
+    name: Build & Verify (PHP 8.4 + Vite)
     runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
 
-    - name: Setup PHP
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Setup PHP 8.4
       uses: shivammathur/setup-php@v2
       with:
         php-version: '8.4'
-        extensions: mbstring, xml, ctype, iconv, mysql, bcmath
+        extensions: mbstring, xml, ctype, iconv, mysql, pdo_sqlite, bcmath, gd
+        coverage: none
 
-    - name: Setup Node.js
+    - name: Setup Node.js 20
       uses: actions/setup-node@v4
       with:
         node-version: '20'
+        cache: 'npm'
 
     - name: Install PHP Dependencies
       run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
-    - name: Install JS Dependencies
-      run: npm install --legacy-peer-deps
+    - name: Install Node Dependencies
+      run: npm ci || npm install --legacy-peer-deps
 
-    - name: Run Build
+    - name: Build Frontend Assets (Vite)
       run: npm run build
       env:
-        VITE_PUSHER_APP_KEY: ${{ secrets.PUSHER_APP_KEY }}
-        VITE_PUSHER_APP_CLUSTER: ${{ secrets.PUSHER_APP_CLUSTER }}
         VITE_APP_NAME: "Elevate Interiors"
 
-    - name: Copy Build Assets via SCP
-      uses: appleboy/scp-action@v0.1.7
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USER }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-        port: ${{ secrets.PORT }}
-        debug: true
-        source: "public/build/*"
-        target: "/home/u157985566/domains/forahia.com/public_html/inventory/public/build/"
-        strip_components: 2
+    - name: Prepare Test Environment
+      run: |
+        cp .env.example .env
+        php artisan key:generate
 
-    - name: Run Sync and Post-Deployment Tasks
-      uses: appleboy/ssh-action@v1.0.3
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USER }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-        port: ${{ secrets.PORT }}
-        debug: true
-        timeout: 60s
-        command_timeout: 30m
-        script: |
-          set -e
-          cd /home/u157985566/domains/forahia.com/public_html/inventory || mkdir -p /home/u157985566/domains/forahia.com/public_html/inventory && cd /home/u157985566/domains/forahia.com/public_html/inventory
-          
-          echo "📥 Syncing code..."
-          if [ ! -d ".git" ]; then
-            git init
-            git remote add origin https://${{ secrets.GITHUB_API_TOKEN }}@github.com/Chi-G/inventory.git
-          fi
-          git fetch origin main
-          git reset --hard origin/main
-          
-          echo "🚀 Running post-deployment script..."
-          bash deploy.sh
+    - name: Run Feature Test Suites
+      run: php artisan test tests/Feature/StockMovementTest.php tests/Feature/CatalogManagementTest.php
+
+  # Optional: Triggers Railway CLI deployment if RAILWAY_TOKEN secret is configured in GitHub Secrets.
+  # If you rely on Railway's native GitHub App integration, Railway will automatically deploy on push to main!
+  railway-deploy:
+    name: Railway Deployment Trigger
+    needs: ci-test-and-build
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install Railway CLI & Deploy (Optional Token Flow)
+        if: env.RAILWAY_TOKEN != ''
+        run: |
+          npm install -g @railway/cli
+          railway up --detach
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}

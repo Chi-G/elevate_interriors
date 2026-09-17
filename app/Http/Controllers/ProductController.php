@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreProductRequest;
+use App\Http\Requests\UpdateProductRequest;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Supplier;
@@ -49,22 +51,9 @@ class ProductController extends Controller
         ]);
     }
 
-    public function store(Request $request, $slug = null)
+    public function store(StoreProductRequest $request, $slug = null)
     {
-        $this->authorize('products.create');
-
-        $validated = $request->validate([
-            'sku' => 'required|string|unique:products,sku|max:50',
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'category_id' => 'required|exists:categories,id',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
-            'barcode_value' => 'nullable|string|unique:products,barcode_value|max:100',
-            'alert_threshold' => 'required|integer|min:0',
-            'cost_price' => 'required|numeric|min:0',
-            'retail_price' => 'required|numeric|min:0',
-            'attributes' => 'nullable|array',
-        ]);
+        $validated = $request->validated();
 
         if ($request->hasFile('image')) {
             $validated['image_path'] = $request->file('image')->store('products', 'public');
@@ -98,22 +87,9 @@ class ProductController extends Controller
         ]);
     }
 
-    public function update(Request $request, Product $product, $slug = null)
+    public function update(UpdateProductRequest $request, Product $product, $slug = null)
     {
-        $this->authorize('products.edit');
-
-        $validated = $request->validate([
-            'sku' => 'required|string|max:50|unique:products,sku,'.$product->id,
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'category_id' => 'required|exists:categories,id',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
-            'barcode_value' => 'nullable|string|max:100|unique:products,barcode_value,'.$product->id,
-            'alert_threshold' => 'required|integer|min:0',
-            'cost_price' => 'required|numeric|min:0',
-            'retail_price' => 'required|numeric|min:0',
-            'attributes' => 'nullable|array',
-        ]);
+        $validated = $request->validated();
 
         if ($request->hasFile('image')) {
             // Delete old image

@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreCategoryRequest;
+use App\Http\Requests\UpdateCategoryRequest;
 use App\Models\Category;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class CategoryController extends Controller
@@ -23,35 +24,19 @@ class CategoryController extends Controller
         return redirect()->route('categories.index', ['slug' => auth()->user()->slug]);
     }
 
-    public function store(Request $request, $slug = null)
+    public function store(StoreCategoryRequest $request, $slug = null)
     {
-        $this->authorize('categories.create');
-
-        $validated = $request->validate([
-            'name' => 'required|string|unique:categories,name|max:255',
-            'description' => 'nullable|string|max:500',
-            'parent_id' => 'nullable|exists:categories,id',
-        ]);
-
-        Category::create($validated);
+        Category::create($request->validated());
 
         return redirect()->back()->with('success', 'Category created successfully.');
     }
 
-    public function update(Request $request, Category $category, $slug = null)
+    public function update(UpdateCategoryRequest $request, Category $category, $slug = null)
     {
-        $this->authorize('categories.edit');
-
-        $validated = $request->validate([
-            'name' => 'required|string|max:255|unique:categories,name,' . $category->id,
-            'description' => 'nullable|string|max:500',
-            'parent_id' => 'nullable|exists:categories,id|different:id',
-        ]);
-
-        $category->update($validated);
+        $category->update($request->validated());
 
         return redirect()->back()->with('success', 'Category updated successfully.');
-    } 
+    }
 
     public function destroy(Category $category, $slug = null)
     {

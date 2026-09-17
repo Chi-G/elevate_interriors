@@ -44,11 +44,16 @@ COPY --from=backend /app /var/www/html
 # Copy frontend build files
 COPY --from=frontend /app/public/build /var/www/html/public/build
 
+# Copy and configure entrypoint script
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
-# Expose port 80
+# Expose default port
 EXPOSE 80
 
-# Start Apache
+# Configure entrypoint and default command
+ENTRYPOINT ["docker-entrypoint.sh"]
 CMD ["apache2-foreground"]
