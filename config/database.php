@@ -46,7 +46,13 @@ return [
 
         'mysql' => [
             'driver' => 'mysql',
-            'url' => (env('DB_URL') ?: env('DATABASE_URL')) ?: (env('MYSQL_URL') ?: env('MYSQL_PRIVATE_URL')),
+            'url' => (function () {
+                $rawUrl = (env('DB_URL') ?: env('DATABASE_URL')) ?: (env('MYSQL_URL') ?: env('MYSQL_PRIVATE_URL'));
+
+                return ($rawUrl && filter_var($rawUrl, FILTER_VALIDATE_URL) && ! empty(parse_url($rawUrl, PHP_URL_HOST)))
+                    ? $rawUrl
+                    : null;
+            })(),
             'host' => (env('DB_HOST') ?: env('MYSQLHOST')) ?: '127.0.0.1',
             'port' => (env('DB_PORT') ?: env('MYSQLPORT')) ?: '3306',
             'database' => (env('DB_DATABASE') ?: env('MYSQLDATABASE')) ?: 'laravel',
