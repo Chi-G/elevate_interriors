@@ -69,6 +69,12 @@ class RecordStockMovementAction
                     if ($recipients->isNotEmpty()) {
                         Notification::send($recipients, new LowStockAlertNotification($freshProduct, $movement));
                     }
+
+                    // Dispatch to default automated notification recipient if not already notified
+                    $defaultAlertEmail = config('mail.alert_recipient');
+                    if ($defaultAlertEmail && ! $recipients->pluck('email')->contains($defaultAlertEmail)) {
+                        Notification::route('mail', $defaultAlertEmail)->notify(new LowStockAlertNotification($freshProduct, $movement));
+                    }
                 }
             });
 

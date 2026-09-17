@@ -115,4 +115,16 @@ return [
         'name' => env('MAIL_FROM_NAME', env('APP_NAME', 'Laravel')),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Default Notification Recipient
+    |--------------------------------------------------------------------------
+    |
+    | Default email address to receive automated system notifications
+    | (e.g. low stock alerts, inventory warnings).
+    |
+    */
+
+    'alert_recipient' => env('NOTIFICATION_EMAIL', 'elevateinteriors.space@gmail.com'),
+
 ];
