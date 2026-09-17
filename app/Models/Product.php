@@ -46,8 +46,6 @@ class Product extends Model
         return $this->hasMany(StockMovement::class);
     }
 
-    // Removed getCurrentStockAttribute to favor direct column access for performance
-
     /**
      * Helper to perform a stock adjustment and generate a movement record.
      */

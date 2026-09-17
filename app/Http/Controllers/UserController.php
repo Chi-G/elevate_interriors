@@ -2,26 +2,29 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Role;
 use App\Models\User;
+use App\Notifications\StaffWelcomeNotification;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use Inertia\Inertia;
 
 class UserController extends Controller
 {
     public function index(Request $request, $slug = null)
     {
         $this->authorize('users.view');
-        
+
         $query = User::orderBy('name');
 
         // Only Super Admins can see other Super Admins
-        if (!$request->user()->isSuperAdmin()) {
+        if (! $request->user()->isSuperAdmin()) {
             $query->where('role', '!=', 'Super Admin');
         }
 
         $users = $query->get();
+
         return Inertia::render('Users/Index', ['users' => $users]);
     }
 
@@ -36,16 +39,19 @@ class UserController extends Controller
 
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:' . User::class,
+            'email' => 'required|string|email|max:255|unique:'.User::class,
             'role' => ['required', Rule::in(['Super Admin', 'Admin', 'Manager', 'Staff'])],
         ]);
 
-        $role = \App\Models\Role::where('display_name', $validated['role'])->first();
+        $role = Role::where('display_name', $validated['role'])->first();
         $validated['role_id'] = $role?->id;
 
-        $validated['password'] = Hash::make('password123');
+        $temporaryPassword = 'password123';
+        $validated['password'] = Hash::make($temporaryPassword);
 
-        User::create($validated);
+        $user = User::create($validated);
+
+        $user->notify(new StaffWelcomeNotification($temporaryPassword));
 
         return redirect()->back()->with('success', 'User created successfully.');
     }
@@ -60,7 +66,7 @@ class UserController extends Controller
             'role' => ['required', Rule::in(['Super Admin', 'Admin', 'Manager', 'Staff'])],
         ]);
 
-        $role = \App\Models\Role::where('display_name', $validated['role'])->first();
+        $role = Role::where('display_name', $validated['role'])->first();
         $validated['role_id'] = $role?->id;
 
         $user->update($validated);
@@ -73,9 +79,9 @@ class UserController extends Controller
         $this->authorize('users.delete');
 
         if ($user->id === $request->user()->id) {
-             return redirect()->back()->with('error', 'You cannot delete yourself.');
+            return redirect()->back()->with('error', 'You cannot delete yourself.');
         }
-        
+
         if ($user->isSuperAdmin()) {
             return redirect()->back()->with('error', 'Cannot delete a Super Admin.');
         }

@@ -6,8 +6,10 @@ use App\Events\StockUpdated;
 use App\Models\Product;
 use App\Models\StockMovement;
 use App\Models\User;
+use App\Notifications\LowStockAlertNotification;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
 use InvalidArgumentException;
 
 class RecordStockMovementAction
@@ -55,10 +57,19 @@ class RecordStockMovementAction
                 'supplier_id' => $supplierId,
             ]);
 
-            // 5. Broadcast real-time stock update ONLY after transaction commits
-            DB::afterCommit(function () use ($lockedProduct, $userId, $type) {
+            // 5. Broadcast real-time stock update and trigger low stock alerts after transaction commits
+            DB::afterCommit(function () use ($lockedProduct, $movement, $userId, $type, $signedDelta) {
+                $freshProduct = $lockedProduct->fresh();
                 $user = $userId ? User::find($userId) : auth()->user();
-                event(new StockUpdated($lockedProduct->fresh(), $user, $type));
+                event(new StockUpdated($freshProduct, $user, $type));
+
+                // Check if current stock dropped to or below the alert threshold on a reducing movement
+                if ($signedDelta < 0 && $freshProduct && $freshProduct->alert_threshold > 0 && $freshProduct->current_stock <= $freshProduct->alert_threshold) {
+                    $recipients = User::whereIn('role', ['Super Admin', 'Admin', 'Manager'])->get();
+                    if ($recipients->isNotEmpty()) {
+                        Notification::send($recipients, new LowStockAlertNotification($freshProduct, $movement));
+                    }
+                }
             });
 
             return $movement;
