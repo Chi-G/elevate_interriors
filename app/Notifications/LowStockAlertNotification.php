@@ -33,25 +33,16 @@ class LowStockAlertNotification extends Notification implements ShouldQueue
      */
     public function toMail(object $notifiable): MailMessage
     {
-        $name = $notifiable->name ?? 'Team Member';
-        $productUrl = route('dashboard');
+        $actionUrl = route('dashboard');
 
         return (new MailMessage)
             ->subject("⚠️ Low Stock Alert: {$this->product->name} ({$this->product->sku})")
-            ->greeting("Hello {$name},")
-            ->line('An item in your inventory has dropped to or below its designated minimum threshold.')
-            ->line("**Product Name:** {$this->product->name}")
-            ->line("**SKU:** {$this->product->sku}")
-            ->line("**Current Remaining Stock:** {$this->product->current_stock} units")
-            ->line("**Minimum Alert Threshold:** {$this->product->alert_threshold} units")
-            ->when($this->movement, function (MailMessage $message) {
-                $type = $this->movement->type ?? 'Movement';
-                $qty = abs($this->movement->quantity ?? 0);
-
-                return $message->line("**Triggered By:** {$type} transaction (-{$qty} units)");
-            })
-            ->action('Review Inventory in Dashboard', $productUrl)
-            ->line('Please restock this item soon to prevent order delays and stock-out disruptions.');
+            ->view('emails.low-stock', [
+                'product' => $this->product,
+                'movement' => $this->movement,
+                'notifiable' => $notifiable,
+                'actionUrl' => $actionUrl,
+            ]);
     }
 
     /**
