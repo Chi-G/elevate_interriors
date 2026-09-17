@@ -12,7 +12,7 @@ export default function Login({ status, canResetPassword }) {
 
   const prefersReducedMotion = useRef(
     typeof window !== 'undefined' &&
-      window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+    window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
   );
 
   // Helper to resolve asset paths across environments
@@ -23,7 +23,7 @@ export default function Login({ status, canResetPassword }) {
 
   const logoSrc = getAsset('brand-logo.png');
 
-  // Slideshow images from public/
+  // Slideshow images from public/ (bg.png + 1.png through 10.png)
   const slides = [
     {
       src: getAsset('bg.png'),
@@ -44,6 +44,30 @@ export default function Login({ status, canResetPassword }) {
     {
       src: getAsset('4.png'),
       caption: 'Built for the standard Elevate holds itself to.',
+    },
+    {
+      src: getAsset('5.png'),
+      caption: 'Precision logistics for bespoke architectural furniture.',
+    },
+    {
+      src: getAsset('6.png'),
+      caption: 'Seamless warehouse operations and catalog oversight.',
+    },
+    {
+      src: getAsset('7.png'),
+      caption: 'Real-time stock adjustments with zero guesswork.',
+    },
+    {
+      src: getAsset('8.png'),
+      caption: 'Elevated craftsmanship, meticulously cataloged.',
+    },
+    {
+      src: getAsset('9.png'),
+      caption: 'Streamlined procurement from verified global suppliers.',
+    },
+    {
+      src: getAsset('10.png'),
+      caption: 'Intelligent analytics powering luxury interior design.',
     },
   ];
 
@@ -116,11 +140,10 @@ export default function Login({ status, canResetPassword }) {
             <img
               src={slide.src}
               alt=""
-              className={`h-full w-full object-cover ${
-                i === activeSlide && !prefersReducedMotion.current
+              className={`h-full w-full object-cover ${i === activeSlide && !prefersReducedMotion.current
                   ? 'animate-[kenburns_9s_ease-out_forwards]'
                   : ''
-              }`}
+                }`}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#0B1220]/90 via-[#0B1220]/30 to-transparent" />
           </div>
@@ -139,7 +162,7 @@ export default function Login({ status, canResetPassword }) {
           </p>
 
           {/* Slide Progress Indicators */}
-          <div className="flex gap-2 mt-10">
+          <div className="flex gap-1.5 mt-8 flex-wrap max-w-md">
             {slides.map((_, i) => (
               <button
                 key={i}
@@ -148,7 +171,7 @@ export default function Login({ status, canResetPassword }) {
                 aria-label={`Go to slide ${i + 1}`}
                 className="h-[3px] rounded-full transition-all duration-500 cursor-pointer p-0 border-0 outline-none"
                 style={{
-                  width: i === activeSlide ? '2.25rem' : '1rem',
+                  width: i === activeSlide ? '1.75rem' : '0.65rem',
                   backgroundColor:
                     i === activeSlide
                       ? '#C9A24B'
@@ -273,7 +296,7 @@ export default function Login({ status, canResetPassword }) {
             </button>
 
             <p className="text-center text-xs text-[#B4AD9B] mt-6">
-              Elevate Interiors System v1.0
+              Elevate Interiors v1.0
             </p>
           </form>
         </div>
