@@ -33,11 +33,12 @@ class LowStockAlertNotification extends Notification implements ShouldQueue
      */
     public function toMail(object $notifiable): MailMessage
     {
+        $name = $notifiable->name ?? 'Team Member';
         $productUrl = route('dashboard');
 
         return (new MailMessage)
             ->subject("⚠️ Low Stock Alert: {$this->product->name} ({$this->product->sku})")
-            ->greeting("Hello {$notifiable->name},")
+            ->greeting("Hello {$name},")
             ->line('An item in your inventory has dropped to or below its designated minimum threshold.')
             ->line("**Product Name:** {$this->product->name}")
             ->line("**SKU:** {$this->product->sku}")
