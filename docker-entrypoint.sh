@@ -5,10 +5,9 @@ set -e
 # Apache MPM Configuration (Prevents AH00534: More than one MPM loaded)
 # -----------------------------------------------------------------------------
 echo "⚙️ Ensuring single Apache MPM (prefork) is active..."
+a2dismod mpm_event mpm_worker 2>/dev/null || true
 rm -f /etc/apache2/mods-enabled/mpm_event.* /etc/apache2/mods-enabled/mpm_worker.* 2>/dev/null || true
-if [ ! -f /etc/apache2/mods-enabled/mpm_prefork.load ]; then
-    a2enmod mpm_prefork 2>/dev/null || true
-fi
+a2enmod mpm_prefork 2>/dev/null || true
 
 # -----------------------------------------------------------------------------
 # Railway Dynamic Port Configuration
