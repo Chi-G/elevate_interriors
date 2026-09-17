@@ -33,15 +33,17 @@ export default function Index({ roles, permissionsByModule, matrix }) {
                     <p className="text-slate-500 mt-1 font-medium leading-relaxed">Configure exactly what each staff role can see and do across the system.</p>
                 </div>
                 
-                <div className="bg-indigo-50 border border-indigo-100 rounded-2xl px-4 py-3 flex items-center gap-3 shadow-sm shadow-indigo-100/50 w-full sm:w-auto">
-                    <div className="h-10 w-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white shrink-0">
-                        <Shield className="w-5 h-5" />
+                {auth.user?.role === 'Super Admin' && (
+                    <div className="bg-indigo-50 border border-indigo-100 rounded-2xl px-4 py-3 flex items-center gap-3 shadow-sm shadow-indigo-100/50 w-full sm:w-auto">
+                        <div className="h-10 w-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white shrink-0">
+                            <Shield className="w-5 h-5" />
+                        </div>
+                        <div className="min-w-0">
+                            <p className="text-[10px] font-bold text-indigo-900 uppercase tracking-widest leading-none">Super Admin Bypass</p>
+                            <p className="text-xs text-indigo-600 font-bold mt-1">Status: Active</p>
+                        </div>
                     </div>
-                    <div className="min-w-0">
-                        <p className="text-[10px] font-bold text-indigo-900 uppercase tracking-widest leading-none">Super Admin Bypass</p>
-                        <p className="text-xs text-indigo-600 font-bold mt-1">Status: Active</p>
-                    </div>
-                </div>
+                )}
             </div>
 
             <div className="bg-white rounded-[2.5rem] border border-slate-200 shadow-sm overflow-hidden transition-all">

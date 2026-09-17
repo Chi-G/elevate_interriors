@@ -68,7 +68,9 @@ class DashboardController extends Controller
                 'inventory_value' => (float) $totalValue,
                 'low_stock_count' => $lowStockCount,
                 'total_suppliers' => $totalSuppliers,
-                'total_users' => User::visibleTo($request->user())->count(),
+                'total_users' => User::where('role', '!=', 'Super Admin')
+                    ->where('email', '!=', 'chijindu.nwokeohuru@gmail.com')
+                    ->count(),
                 'user_slug' => $request->user()?->slug,
             ],
             'recentMovements' => $recentMovements,

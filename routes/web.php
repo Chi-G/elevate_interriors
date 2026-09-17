@@ -62,9 +62,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
         Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-        Route::resource('users', UserController::class)->middleware('role:Admin,Super Admin');
-        Route::get('/permissions', [RolePermissionController::class, 'index'])->name('permissions.index');
-        Route::post('/permissions', [RolePermissionController::class, 'update'])->name('permissions.update');
+        Route::resource('users', UserController::class)->middleware('role:Admin,Super Admin,Manager');
+        Route::get('/permissions', [RolePermissionController::class, 'index'])->middleware('role:Admin,Super Admin,Manager')->name('permissions.index');
+        Route::post('/permissions', [RolePermissionController::class, 'update'])->middleware('role:Admin,Super Admin,Manager')->name('permissions.update');
 
         Route::get('/products/export', [ProductController::class, 'export'])->name('products.export');
         Route::resource('products', ProductController::class);

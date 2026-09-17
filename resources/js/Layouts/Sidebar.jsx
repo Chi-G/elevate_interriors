@@ -26,8 +26,8 @@ export default function Sidebar({ isOpen, onClose, isCollapsed = false, onToggle
         { name: 'Scan Center', icon: Component, route: 'scanner.index', active: route().current('scanner.*'), show: can?.['products.view'] },
         { name: 'Movement Logs', icon: History, route: 'inventory.logs', active: route().current('inventory.logs'), show: can?.['inventory.view'] },
         { name: 'Suppliers', icon: Truck, route: 'suppliers.index', active: route().current('suppliers.*'), show: can?.['suppliers.view'] },
-        { name: 'Users', icon: Users, route: 'users.index', active: route().current('users.*'), show: can?.['users.view'] },
-        { name: 'Permissions', icon: Lock, route: 'permissions.index', active: route().current('permissions.*'), show: can?.['users.permissions'] },
+        { name: 'Users', icon: Users, route: 'users.index', active: route().current('users.*'), show: Boolean(can?.['users.view'] || ['Super Admin', 'Admin', 'Manager'].includes(user?.role)) },
+        { name: 'Permissions', icon: Lock, route: 'permissions.index', active: route().current('permissions.*'), show: Boolean(can?.['users.permissions'] || ['Super Admin', 'Admin', 'Manager'].includes(user?.role)) },
     ].filter(item => item.show);
 
     if (!user) return null;
