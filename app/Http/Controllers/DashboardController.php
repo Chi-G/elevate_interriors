@@ -8,7 +8,6 @@ use App\Models\Supplier;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
@@ -16,11 +15,11 @@ class DashboardController extends Controller
     {
         // 1. Core KPIs
         $totalProducts = Product::count();
-        
+
         // Total Value: SUM(current_stock * retail_price)
         $totalValue = Product::selectRaw('COALESCE(SUM(current_stock * retail_price), 0) as total_value')
             ->value('total_value');
- 
+
         // Low Stock Count: Products where current_stock <= alert_threshold
         $lowStockCount = Product::whereColumn('current_stock', '<=', 'alert_threshold')
             ->count();
@@ -55,21 +54,21 @@ class DashboardController extends Controller
         for ($i = $days; $i >= 0; $i--) {
             $date = now()->subDays($i)->format('Y-m-d');
             $movements = $trendData->get($date);
-            
+
             $trends[] = [
                 'date' => now()->subDays($i)->format('d M'),
-                'in' => $movements ? (int)abs($movements->where('type', 'IN')->sum('total')) : 0,
-                'out' => $movements ? (int)abs($movements->where('type', 'OUT')->sum('total')) : 0,
+                'in' => $movements ? (int) abs($movements->where('type', 'IN')->sum('total')) : 0,
+                'out' => $movements ? (int) abs($movements->where('type', 'OUT')->sum('total')) : 0,
             ];
         }
 
         return Inertia::render('Dashboard', [
             'stats' => [
                 'total_products' => $totalProducts,
-                'inventory_value' => (float)$totalValue,
+                'inventory_value' => (float) $totalValue,
                 'low_stock_count' => $lowStockCount,
                 'total_suppliers' => $totalSuppliers,
-                'total_users' => User::count(),
+                'total_users' => User::visibleTo($request->user())->count(),
                 'user_slug' => $request->user()?->slug,
             ],
             'recentMovements' => $recentMovements,

@@ -45,7 +45,7 @@ jobs:
         php artisan key:generate
 
     - name: Run Feature Test Suites
-      run: php artisan test tests/Feature/StockMovementTest.php tests/Feature/CatalogManagementTest.php
+      run: php artisan test tests/Feature/StockMovementTest.php tests/Feature/CatalogManagementTest.php tests/Feature/UserVisibilityTest.php
 
   # Optional: Triggers Railway CLI deployment if RAILWAY_TOKEN secret is configured in GitHub Secrets.
   # If you rely on Railway's native GitHub App integration, Railway will automatically deploy on push to main!

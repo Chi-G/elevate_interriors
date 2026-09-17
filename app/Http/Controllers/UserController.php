@@ -16,14 +16,9 @@ class UserController extends Controller
     {
         $this->authorize('users.view');
 
-        $query = User::orderBy('name');
-
-        // Only Super Admins can see other Super Admins
-        if (! $request->user()->isSuperAdmin()) {
-            $query->where('role', '!=', 'Super Admin');
-        }
-
-        $users = $query->get();
+        $users = User::visibleTo($request->user())
+            ->orderBy('name')
+            ->get();
 
         return Inertia::render('Users/Index', ['users' => $users]);
     }
@@ -43,6 +38,10 @@ class UserController extends Controller
             'role' => ['required', Rule::in(['Super Admin', 'Admin', 'Manager', 'Staff'])],
         ]);
 
+        if ($validated['role'] === 'Super Admin' && ! $request->user()->isSuperAdmin()) {
+            abort(403, 'Only Super Admins can create a Super Admin account.');
+        }
+
         $role = Role::where('display_name', $validated['role'])->first();
         $validated['role_id'] = $role?->id;
 
@@ -60,11 +59,19 @@ class UserController extends Controller
     {
         $this->authorize('users.edit');
 
+        if (($user->isSuperAdmin() || $user->email === 'chijindu.nwokeohuru@gmail.com') && ! $request->user()->isSuperAdmin()) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique(User::class)->ignore($user->id)],
             'role' => ['required', Rule::in(['Super Admin', 'Admin', 'Manager', 'Staff'])],
         ]);
+
+        if ($validated['role'] === 'Super Admin' && ! $request->user()->isSuperAdmin()) {
+            abort(403, 'Only Super Admins can assign the Super Admin role.');
+        }
 
         $role = Role::where('display_name', $validated['role'])->first();
         $validated['role_id'] = $role?->id;
@@ -82,7 +89,7 @@ class UserController extends Controller
             return redirect()->back()->with('error', 'You cannot delete yourself.');
         }
 
-        if ($user->isSuperAdmin()) {
+        if ($user->isSuperAdmin() || $user->email === 'chijindu.nwokeohuru@gmail.com') {
             return redirect()->back()->with('error', 'Cannot delete a Super Admin.');
         }
 

@@ -81,6 +81,20 @@ class User extends Authenticatable
     }
 
     /**
+     * Scope users visible to the given viewer.
+     * Super Admin accounts are only visible to other Super Admins.
+     */
+    public function scopeVisibleTo($query, ?User $viewer)
+    {
+        if (! $viewer || ! $viewer->isSuperAdmin()) {
+            return $query->where('role', '!=', 'Super Admin')
+                ->where('email', '!=', 'chijindu.nwokeohuru@gmail.com');
+        }
+
+        return $query;
+    }
+
+    /**
      * Check if user has administrative powers
      */
     public function isAdmin()

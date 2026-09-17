@@ -2,72 +2,62 @@
 
 namespace Database\Seeders;
 
+use App\Models\StockMovement;
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-
     /**
      * Seed the application's database.
      */
     public function run(): void
     {
         // 1. Super Admin
-        User::firstOrCreate(
-            ['email' => 'admin@elevate.com'],
+        User::updateOrCreate(
+            ['email' => 'chijindu.nwokeohuru@gmail.com'],
             [
-                'uuid' => (string) \Illuminate\Support\Str::uuid(),
                 'name' => 'Super Admin',
                 'role' => 'Super Admin',
-                'password' => bcrypt('password123')
+                'password' => bcrypt('chibuike4u@EI'),
             ]
         );
 
-        // Admin
-        User::firstOrCreate(
-            ['email' => 'general@elevate.com'],
+        // 2. General Admin
+        User::updateOrCreate(
+            ['email' => 'admin@elevateinteriors.space'],
             [
-                'uuid' => (string) \Illuminate\Support\Str::uuid(),
                 'name' => 'General Admin',
                 'role' => 'Admin',
-                'password' => bcrypt('password123')
+                'password' => bcrypt('admin@elevateinteriors$space'),
             ]
         );
 
-        // Manager
-        User::firstOrCreate(
-            ['email' => 'manager@elevate.com'],
+        // 3. Manager
+        User::updateOrCreate(
+            ['email' => 'drmally@elevateinteriors.space'],
             [
-                'uuid' => (string) \Illuminate\Support\Str::uuid(),
-                'name' => 'Stock Manager',
+                'name' => 'Manager',
                 'role' => 'Manager',
-                'password' => bcrypt('password123')
+                'password' => bcrypt('admin@elevateinteriors$space'),
             ]
         );
 
-        // Staff
-        User::firstOrCreate(
-            ['email' => 'staff@elevate.com'],
-            [
-                'uuid' => (string) \Illuminate\Support\Str::uuid(),
-                'name' => 'Inventory Staff',
-                'role' => 'Staff',
-                'password' => bcrypt('password123')
-            ]
-        );
+        // Remove all other users from the database
+        $retainedEmails = [
+            'chijindu.nwokeohuru@gmail.com',
+            'admin@elevateinteriors.space',
+            'drmally@elevateinteriors.space',
+        ];
 
-        // Test Admin (Timed Access)
-        User::firstOrCreate(
-            ['email' => 'drmally@elevate.com'],
-            [
-                'uuid' => (string) \Illuminate\Support\Str::uuid(),
-                'name' => 'Test Admin',
-                'role' => 'Admin',
-                'password' => bcrypt('password123')
-            ]
-        );
+        // Reassign any stock movements from orphaned users before deletion to prevent cascade loss
+        $superAdmin = User::where('email', 'chijindu.nwokeohuru@gmail.com')->first();
+        if ($superAdmin) {
+            StockMovement::whereNotIn('user_id', User::whereIn('email', $retainedEmails)->pluck('id'))
+                ->update(['user_id' => $superAdmin->id]);
+        }
+
+        User::whereNotIn('email', $retainedEmails)->delete();
 
         // 2. Catalog & Products
         $this->call([
