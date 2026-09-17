@@ -4,6 +4,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
+ENV VITE_APP_NAME="Elevate Interiors"
 RUN npm run build
 
 # Stage 2: Build backend dependencies
@@ -36,8 +37,8 @@ RUN a2dismod mpm_event mpm_worker 2>/dev/null || true \
     && a2enmod mpm_prefork rewrite
 
 # Change document root to public
-ENV APACHE_DOCUMENT_ROOT /var/www/html/public
-ENV LOG_CHANNEL stderr
+ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
+ENV LOG_CHANNEL=stderr
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
 RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 

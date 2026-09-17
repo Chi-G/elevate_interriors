@@ -10,7 +10,7 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createRoot } from 'react-dom/client';
 import PageLoader from './Components/PageLoader';
 
-const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
+const appName = import.meta.env.VITE_APP_NAME || 'Elevate Interiors';
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
