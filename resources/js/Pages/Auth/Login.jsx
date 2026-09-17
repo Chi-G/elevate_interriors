@@ -1,155 +1,301 @@
-import Checkbox from '@/Components/Checkbox';
-import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
-import GuestLayout from '@/Layouts/GuestLayout';
+import { useEffect, useRef, useState } from 'react';
 import { Head, Link, useForm, usePage } from '@inertiajs/react';
-import { useState, useEffect } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
 import LockoutModal from '@/Components/LockoutModal';
 
 export default function Login({ status, canResetPassword }) {
-    const { flash } = usePage().props;
-    const [showPassword, setShowPassword] = useState(false);
-    const [showLockoutModal, setShowLockoutModal] = useState(false);
+  const { app, flash } = usePage().props;
+  const [showPassword, setShowPassword] = useState(false);
+  const [showLockoutModal, setShowLockoutModal] = useState(false);
+  const [activeSlide, setActiveSlide] = useState(0);
+  const [entered, setEntered] = useState(false);
 
-    useEffect(() => {
-        if (flash.lockout) {
-            setShowLockoutModal(true);
-        }
-    }, [flash.lockout]);
-    const { data, setData, post, processing, errors, reset } = useForm({
-        email: '',
-        password: '',
-        remember: false,
+  const prefersReducedMotion = useRef(
+    typeof window !== 'undefined' &&
+      window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+  );
+
+  // Helper to resolve asset paths across environments
+  const getAsset = (path) => {
+    const cleanPath = path.startsWith('/') ? path.substring(1) : path;
+    return app?.is_production && app?.url ? `${app.url}/${cleanPath}` : `/${cleanPath}`;
+  };
+
+  const logoSrc = getAsset('brand-logo.png');
+
+  // Slideshow images from public/
+  const slides = [
+    {
+      src: getAsset('bg.png'),
+      caption: 'The premium standard for modern inventory tracking and structural stock management.',
+    },
+    {
+      src: getAsset('1.png'),
+      caption: 'Full traceability from stockroom to showroom floor.',
+    },
+    {
+      src: getAsset('2.png'),
+      caption: 'Every unit logged, every structural movement accounted for.',
+    },
+    {
+      src: getAsset('3.png'),
+      caption: 'Curated spaces, synchronized stock intelligence.',
+    },
+    {
+      src: getAsset('4.png'),
+      caption: 'Built for the standard Elevate holds itself to.',
+    },
+  ];
+
+  const { data, setData, post, processing, errors, reset } = useForm({
+    email: '',
+    password: '',
+    remember: false,
+  });
+
+  // Handle staff lockout state
+  useEffect(() => {
+    if (flash?.lockout) {
+      setShowLockoutModal(true);
+    }
+  }, [flash?.lockout]);
+
+  // Entrance animation
+  useEffect(() => {
+    const t = setTimeout(() => setEntered(true), 60);
+    return () => clearTimeout(t);
+  }, []);
+
+  // Slideshow auto-advance (6s interval)
+  useEffect(() => {
+    if (prefersReducedMotion.current) return;
+    const id = setInterval(() => {
+      setActiveSlide((i) => (i + 1) % slides.length);
+    }, 6000);
+    return () => clearInterval(id);
+  }, [slides.length]);
+
+  const submit = (e) => {
+    e.preventDefault();
+
+    const startTime = Date.now();
+    window.dispatchEvent(
+      new CustomEvent('elevate:start-loader', {
+        detail: { text: 'AUTHENTICATING & LOADING DASHBOARD...' },
+      })
+    );
+
+    post(route('login'), {
+      onSuccess: () => {
+        const elapsed = Date.now() - startTime;
+        const remaining = Math.max(0, 2000 - elapsed);
+        setTimeout(() => {
+          window.dispatchEvent(new CustomEvent('elevate:stop-loader'));
+        }, remaining);
+      },
+      onError: () => {
+        window.dispatchEvent(new CustomEvent('elevate:stop-loader'));
+      },
+      onFinish: () => reset('password'),
     });
+  };
 
-    const submit = (e) => {
-        e.preventDefault();
+  return (
+    <div className="min-h-screen w-full bg-[#FBFAF6] flex font-sans">
+      <Head title="Sign In - Elevate Interiors" />
 
-        const startTime = Date.now();
-        window.dispatchEvent(new CustomEvent('elevate:start-loader', {
-            detail: { text: 'AUTHENTICATING & LOADING DASHBOARD...' }
-        }));
+      {/* ---------- Left: Image Slideshow ---------- */}
+      <div className="hidden lg:block relative lg:w-[58%] overflow-hidden bg-[#0E1522]">
+        {slides.map((slide, i) => (
+          <div
+            key={i}
+            aria-hidden={i !== activeSlide}
+            className="absolute inset-0 transition-opacity duration-[1400ms] ease-out"
+            style={{ opacity: i === activeSlide ? 1 : 0 }}
+          >
+            <img
+              src={slide.src}
+              alt=""
+              className={`h-full w-full object-cover ${
+                i === activeSlide && !prefersReducedMotion.current
+                  ? 'animate-[kenburns_9s_ease-out_forwards]'
+                  : ''
+              }`}
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0B1220]/90 via-[#0B1220]/30 to-transparent" />
+          </div>
+        ))}
 
-        post(route('login'), {
-            onSuccess: () => {
-                const elapsed = Date.now() - startTime;
-                const remaining = Math.max(0, 2000 - elapsed);
+        <div className="relative h-full flex flex-col justify-end p-14 z-10">
+          <p className="text-[#E9DFC8] text-lg font-light leading-snug max-w-md mb-6 transition-opacity duration-700">
+            {slides[activeSlide].caption}
+          </p>
 
-                setTimeout(() => {
-                    window.dispatchEvent(new CustomEvent('elevate:stop-loader'));
-                }, remaining);
-            },
-            onError: () => {
-                window.dispatchEvent(new CustomEvent('elevate:stop-loader'));
-            },
-            onFinish: () => reset('password'),
-        });
-    };
+          <h1 className="text-white text-[2.75rem] leading-[1.05] font-serif tracking-tight mb-3">
+            Elevate Interiors
+          </h1>
+          <p className="text-[#C9BFA5] text-sm max-w-sm">
+            The premium standard for modern inventory tracking and structural stock management.
+          </p>
 
-    return (
-        <GuestLayout>
-            <Head title="Log in" />
+          {/* Slide Progress Indicators */}
+          <div className="flex gap-2 mt-10">
+            {slides.map((_, i) => (
+              <button
+                key={i}
+                type="button"
+                onClick={() => setActiveSlide(i)}
+                aria-label={`Go to slide ${i + 1}`}
+                className="h-[3px] rounded-full transition-all duration-500 cursor-pointer p-0 border-0 outline-none"
+                style={{
+                  width: i === activeSlide ? '2.25rem' : '1rem',
+                  backgroundColor:
+                    i === activeSlide
+                      ? '#C9A24B'
+                      : 'rgba(233, 223, 200, 0.35)',
+                }}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
 
-            <div className="mb-6">
-                <h1 className="text-2xl font-extrabold tracking-tight text-slate-900 mb-1">Welcome Back.</h1>
-                <p className="text-slate-500 text-sm font-medium">Sign in to manage your inventory and operations.</p>
-            </div>
+      {/* ---------- Right: Login Panel ---------- */}
+      <div className="w-full lg:w-[42%] flex items-center justify-center px-8 py-12">
+        <div className="w-full max-w-sm">
+          <div
+            className="flex flex-col items-center mb-9 transition-all duration-700 ease-out"
+            style={{
+              opacity: entered ? 1 : 0,
+              transform: entered ? 'scale(1)' : 'scale(0.92)',
+            }}
+          >
+            <img
+              src={logoSrc}
+              alt="Elevate Interiors"
+              className="h-24 w-24 rounded-full shadow-[0_8px_30px_rgba(184,135,74,0.25)] mb-6 object-contain bg-white p-2 border border-[#E7E2D8]"
+            />
+            <h2 className="font-serif text-[1.9rem] text-[#211E1A] tracking-tight">
+              Welcome back
+            </h2>
+            <p className="text-[#8A8474] text-sm mt-1.5 text-center">
+              Sign in to manage your inventory and operations.
+            </p>
+          </div>
 
+          <form
+            onSubmit={submit}
+            className="transition-all duration-700 ease-out delay-150"
+            style={{
+              opacity: entered ? 1 : 0,
+              transform: entered ? 'translateY(0)' : 'translateY(10px)',
+            }}
+          >
             {status && (
-                <div className="mb-6 rounded-md bg-green-50 p-4 text-sm font-medium text-green-800 border border-green-200 shadow-sm">
-                    {status}
-                </div>
+              <div className="mb-5 text-sm font-medium text-[#3F6B4F] bg-[#EDF3EE] rounded-lg px-4 py-2.5 border border-[#c3d9c8]">
+                {status}
+              </div>
             )}
 
-            <form onSubmit={submit} className="space-y-4">
-                <div>
-                    <InputLabel htmlFor="email" value="Email Address" className="text-slate-700 font-semibold mb-1" />
+            <div>
+              <label className="block text-sm font-medium text-[#211E1A] mb-1.5">
+                Email address
+              </label>
+              <input
+                type="email"
+                value={data.email}
+                autoComplete="username"
+                placeholder="admin@elevate.com"
+                onChange={(e) => setData('email', e.target.value)}
+                className="w-full rounded-xl border border-[#E7E2D8] bg-[#F7F5EF] px-4 py-3 text-[#211E1A] placeholder:text-[#B4AD9B] focus:outline-none focus:ring-2 focus:ring-[#C9A24B]/60 focus:border-[#C9A24B] transition"
+                required
+              />
+              {errors.email && (
+                <p className="mt-1.5 text-sm text-[#B3453A]">{errors.email}</p>
+              )}
+            </div>
 
-                    <TextInput
-                        id="email"
-                        type="email"
-                        name="email"
-                        value={data.email}
-                        className="mt-1 block w-full rounded-lg border-slate-200 bg-slate-50 shadow-sm focus:border-slate-800 focus:bg-white focus:ring-slate-800 transition-all py-2.5 px-4 text-slate-900"
-                        autoComplete="username"
-                        isFocused={true}
-                        placeholder="admin@elevate.com"
-                        onChange={(e) => setData('email', e.target.value)}
-                    />
+            <div className="mt-5">
+              <div className="flex items-center justify-between mb-1.5">
+                <label className="text-sm font-medium text-[#211E1A]">
+                  Password
+                </label>
+                {canResetPassword && (
+                  <Link
+                    href={route('password.request')}
+                    className="text-sm text-[#8A6A2E] hover:text-[#B8874A] transition-colors"
+                  >
+                    Forgot password?
+                  </Link>
+                )}
+              </div>
+              <div className="relative">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  value={data.password}
+                  autoComplete="current-password"
+                  placeholder="••••••••"
+                  onChange={(e) => setData('password', e.target.value)}
+                  className="w-full rounded-xl border border-[#E7E2D8] bg-[#F7F5EF] px-4 py-3 pr-12 text-[#211E1A] placeholder:text-[#B4AD9B] focus:outline-none focus:ring-2 focus:ring-[#C9A24B]/60 focus:border-[#C9A24B] transition"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute inset-y-0 right-0 pr-4 flex items-center text-[#8A8474] hover:text-[#211E1A] transition-colors cursor-pointer"
+                >
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
+              {errors.password && (
+                <p className="mt-1.5 text-sm text-[#B3453A]">{errors.password}</p>
+              )}
+            </div>
 
-                    <InputError message={errors.email} className="mt-2" />
-                </div>
+            <label className="flex items-center gap-2.5 mt-5 cursor-pointer select-none">
+              <input
+                type="checkbox"
+                checked={data.remember}
+                onChange={(e) => setData('remember', e.target.checked)}
+                className="h-4 w-4 rounded border-[#D8D2C2] text-[#B8874A] focus:ring-[#C9A24B]/60 cursor-pointer"
+              />
+              <span className="text-sm text-[#5B5646]">
+                Keep me signed in
+              </span>
+            </label>
 
-                <div>
-                    <div className="flex items-center justify-between mb-1">
-                        <InputLabel htmlFor="password" value="Password" className="text-slate-700 font-semibold" />
+            <button
+              type="submit"
+              disabled={processing}
+              className="w-full mt-7 rounded-xl bg-[#151312] hover:bg-[#211E1A] disabled:opacity-60 text-white text-sm font-medium tracking-wide py-3.5 transition-all shadow-md hover:shadow-lg cursor-pointer"
+            >
+              {processing ? 'Signing in…' : 'Access system'}
+            </button>
 
-                        {canResetPassword && (
-                            <Link
-                                href={route('password.request')}
-                                className="text-xs font-semibold text-slate-500 hover:text-slate-900 transition-colors"
-                            >
-                                Forgot password?
-                            </Link>
-                        )}
-                    </div>
+            <p className="text-center text-xs text-[#B4AD9B] mt-6">
+              Elevate Interiors System v1.0
+            </p>
+          </form>
+        </div>
+      </div>
 
-                    <div className="relative">
-                        <TextInput
-                            id="password"
-                            type={showPassword ? "text" : "password"}
-                            name="password"
-                            value={data.password}
-                            className="mt-1 block w-full rounded-lg border-slate-200 bg-slate-50 shadow-sm focus:border-slate-800 focus:bg-white focus:ring-slate-800 transition-all py-2.5 pl-4 pr-12 text-slate-900"
-                            autoComplete="current-password"
-                            placeholder="••••••••"
-                            onChange={(e) => setData('password', e.target.value)}
-                        />
-                        <button
-                            type="button"
-                            onClick={() => setShowPassword(!showPassword)}
-                            className="absolute inset-y-0 right-0 pr-4 flex items-center mt-1 text-slate-400 hover:text-slate-600 transition-colors"
-                        >
-                            {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                        </button>
-                    </div>
+      {/* Lockout Security Modal */}
+      <LockoutModal
+        show={showLockoutModal}
+        onClose={() => setShowLockoutModal(false)}
+        lockoutData={flash?.lockout}
+      />
 
-                    <InputError message={errors.password} className="mt-2" />
-                </div>
-
-                <div className="block">
-                    <label className="flex items-center group cursor-pointer w-fit">
-                        <Checkbox
-                            name="remember"
-                            checked={data.remember}
-                            onChange={(e) => setData('remember', e.target.checked)}
-                            className="text-slate-800 focus:ring-slate-800 rounded flex-shrink-0 border-slate-300 shadow-sm transition-colors"
-                        />
-                        <span className="ms-3 text-sm text-slate-600 font-medium group-hover:text-slate-900 transition-colors">
-                            Keep me signed in
-                        </span>
-                    </label>
-                </div>
-
-                <div className="pt-2">
-                    <PrimaryButton className="w-full justify-center bg-slate-900 hover:bg-slate-800 text-white rounded-lg py-3 font-bold tracking-wide transition-all shadow-md hover:shadow-lg focus:ring-offset-2 focus:ring-slate-900 text-base" disabled={processing}>
-                        Access System
-                    </PrimaryButton>
-                </div>
-
-                <p className="text-center text-[10px] text-slate-400 mt-6 font-medium tracking-wide uppercase">
-                    Elevate Interiors System v1.0
-                </p>
-            </form>
-
-            <LockoutModal 
-                show={showLockoutModal} 
-                onClose={() => setShowLockoutModal(false)} 
-                lockoutData={flash.lockout} 
-            />
-        </GuestLayout>
-    );
+      {/* Ken Burns Keyframes */}
+      <style>{`
+        @keyframes kenburns {
+          from { transform: scale(1); }
+          to { transform: scale(1.08); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .animate-\\[kenburns_9s_ease-out_forwards\\] { animation: none !important; }
+        }
+      `}</style>
+    </div>
+  );
 }
