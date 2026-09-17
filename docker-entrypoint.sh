@@ -2,6 +2,15 @@
 set -e
 
 # -----------------------------------------------------------------------------
+# Apache MPM Configuration (Prevents AH00534: More than one MPM loaded)
+# -----------------------------------------------------------------------------
+echo "⚙️ Ensuring single Apache MPM (prefork) is active..."
+rm -f /etc/apache2/mods-enabled/mpm_event.* /etc/apache2/mods-enabled/mpm_worker.* 2>/dev/null || true
+if [ ! -f /etc/apache2/mods-enabled/mpm_prefork.load ]; then
+    a2enmod mpm_prefork 2>/dev/null || true
+fi
+
+# -----------------------------------------------------------------------------
 # Railway Dynamic Port Configuration
 # -----------------------------------------------------------------------------
 # Railway dynamically allocates $PORT to the container.
@@ -54,6 +63,9 @@ if [ -n "$APP_KEY" ]; then
     php artisan route:cache || true
     php artisan view:cache || true
 fi
+
+echo "🔍 Validating Apache configuration..."
+apache2ctl -t || true
 
 echo "🚀 Elevate Interiors container initialization complete. Starting web server on port ${PORT}..."
 exec "$@"
