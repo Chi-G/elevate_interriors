@@ -34,10 +34,10 @@ export default function ResetPassword({ token, email }) {
                         type="email"
                         name="email"
                         value={data.email}
-                        className="w-full rounded-xl border border-[#E7E2D8] bg-[#F7F5EF] px-4 py-3 font-sans text-[1rem] font-normal text-[#211E1A] placeholder:text-[#B4AD9B] focus:outline-none focus:ring-2 focus:ring-[#C9A24B]/60 focus:border-[#C9A24B] transition"
+                        className="w-full rounded-xl border border-[#E7E2D8] bg-[#EFECE6]/80 px-4 py-3 font-sans text-[1rem] font-normal text-[#6B655B] cursor-not-allowed select-none opacity-80 transition"
                         autoComplete="username"
-                        onChange={(e) => setData('email', e.target.value)}
-                        required
+                        disabled
+                        readOnly
                     />
                     {errors.email && (
                         <p className="mt-1.5 text-sm text-[#B3453A]">{errors.email}</p>
