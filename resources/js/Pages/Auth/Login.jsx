@@ -154,7 +154,7 @@ export default function Login({ status, canResetPassword }) {
             {slides[activeSlide].caption}
           </p>
 
-          <h1 className="text-white text-[2.75rem] leading-[1.05] font-serif tracking-tight mb-3">
+          <h1 className="text-white text-[2.75rem] leading-[1.05] font-serif font-semibold tracking-tight mb-3">
             Elevate Interiors
           </h1>
           <p className="text-[#C9BFA5] text-sm max-w-sm">
@@ -187,21 +187,21 @@ export default function Login({ status, canResetPassword }) {
       <div className="w-full lg:w-[42%] flex items-center justify-center px-8 py-12">
         <div className="w-full max-w-sm">
           <div
-            className="flex flex-col items-center mb-9 transition-all duration-700 ease-out"
+            className="flex flex-col items-start text-left mb-8 transition-all duration-700 ease-out"
             style={{
               opacity: entered ? 1 : 0,
-              transform: entered ? 'scale(1)' : 'scale(0.92)',
+              transform: entered ? 'translateY(0)' : 'translateY(8px)',
             }}
           >
             <img
               src={logoSrc}
               alt="Elevate Interiors"
-              className="h-24 w-24 rounded-full shadow-[0_8px_30px_rgba(184,135,74,0.25)] mb-6 object-contain bg-white p-2 border border-[#E7E2D8]"
+              className="h-16 w-16 rounded-2xl shadow-[0_4px_20px_rgba(184,135,74,0.18)] mb-6 object-contain bg-white p-2 border border-[#E7E2D8]"
             />
-            <h2 className="font-serif text-[1.9rem] text-[#211E1A] tracking-tight">
+            <h2 className="font-serif font-medium text-[2.25rem] leading-[1.15] text-[#211E1A] tracking-tight mb-2.5">
               Welcome back
             </h2>
-            <p className="text-[#8A8474] text-sm mt-1.5 text-center">
+            <p className="font-sans text-[0.95rem] font-normal text-[#787163] leading-relaxed">
               Sign in to manage your inventory and operations.
             </p>
           </div>
@@ -221,7 +221,7 @@ export default function Login({ status, canResetPassword }) {
             )}
 
             <div>
-              <label className="block text-sm font-medium text-[#211E1A] mb-1.5">
+              <label className="block font-sans text-[0.875rem] font-medium text-[#211E1A] mb-1.5">
                 Email address
               </label>
               <input
@@ -230,7 +230,7 @@ export default function Login({ status, canResetPassword }) {
                 autoComplete="username"
                 placeholder="admin@elevateinteriors.space"
                 onChange={(e) => setData('email', e.target.value)}
-                className="w-full rounded-xl border border-[#E7E2D8] bg-[#F7F5EF] px-4 py-3 text-[#211E1A] placeholder:text-[#B4AD9B] focus:outline-none focus:ring-2 focus:ring-[#C9A24B]/60 focus:border-[#C9A24B] transition"
+                className="w-full rounded-xl border border-[#E7E2D8] bg-[#F7F5EF] px-4 py-3 font-sans text-[1rem] font-normal text-[#211E1A] placeholder:text-[#B4AD9B] focus:outline-none focus:ring-2 focus:ring-[#C9A24B]/60 focus:border-[#C9A24B] transition"
                 required
               />
               {errors.email && (
@@ -240,13 +240,13 @@ export default function Login({ status, canResetPassword }) {
 
             <div className="mt-5">
               <div className="flex items-center justify-between mb-1.5">
-                <label className="text-sm font-medium text-[#211E1A]">
+                <label className="font-sans text-[0.875rem] font-medium text-[#211E1A]">
                   Password
                 </label>
                 {canResetPassword && (
                   <Link
                     href={route('password.request')}
-                    className="text-sm text-[#8A6A2E] hover:text-[#B8874A] transition-colors"
+                    className="font-sans text-[0.875rem] font-medium text-[#8A6A2E] hover:text-[#B8874A] transition-colors"
                   >
                     Forgot password?
                   </Link>
@@ -259,7 +259,7 @@ export default function Login({ status, canResetPassword }) {
                   autoComplete="current-password"
                   placeholder="••••••••"
                   onChange={(e) => setData('password', e.target.value)}
-                  className="w-full rounded-xl border border-[#E7E2D8] bg-[#F7F5EF] px-4 py-3 pr-12 text-[#211E1A] placeholder:text-[#B4AD9B] focus:outline-none focus:ring-2 focus:ring-[#C9A24B]/60 focus:border-[#C9A24B] transition"
+                  className="w-full rounded-xl border border-[#E7E2D8] bg-[#F7F5EF] px-4 py-3 pr-12 font-sans text-[1rem] font-normal text-[#211E1A] placeholder:text-[#B4AD9B] focus:outline-none focus:ring-2 focus:ring-[#C9A24B]/60 focus:border-[#C9A24B] transition"
                   required
                 />
                 <button
@@ -282,7 +282,7 @@ export default function Login({ status, canResetPassword }) {
                 onChange={(e) => setData('remember', e.target.checked)}
                 className="h-4 w-4 rounded border-[#D8D2C2] text-[#B8874A] focus:ring-[#C9A24B]/60 cursor-pointer"
               />
-              <span className="text-sm text-[#5B5646]">
+              <span className="font-sans text-[0.875rem] font-normal text-[#5B5646]">
                 Keep me signed in
               </span>
             </label>
@@ -290,12 +290,12 @@ export default function Login({ status, canResetPassword }) {
             <button
               type="submit"
               disabled={processing}
-              className="w-full mt-7 rounded-xl bg-[#151312] hover:bg-[#211E1A] disabled:opacity-60 text-white text-sm font-medium tracking-wide py-3.5 transition-all shadow-md hover:shadow-lg cursor-pointer"
+              className="w-full mt-7 rounded-xl bg-[#151312] hover:bg-[#211E1A] disabled:opacity-60 text-white font-sans text-[0.9rem] font-medium tracking-wide py-3.5 transition-all shadow-md hover:shadow-lg cursor-pointer"
             >
               {processing ? 'Signing in…' : 'Access system'}
             </button>
 
-            <p className="text-center text-xs text-[#B4AD9B] mt-6">
+            <p className="font-sans text-[0.75rem] font-normal text-[#9E9786] mt-6">
               Elevate Interiors v1.0
             </p>
           </form>
