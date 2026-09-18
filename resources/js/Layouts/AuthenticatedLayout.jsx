@@ -79,7 +79,7 @@ export default function AuthenticatedLayout({ header, children }) {
     }, []);
 
     return (
-        <div className="min-h-screen bg-slate-50 flex font-sans transition-colors duration-300">
+        <div className="min-h-screen bg-[#FBFAF6] flex font-sans transition-colors duration-300">
             {/* Sidebar Desktop & Mobile */}
             <Sidebar
                 isOpen={sidebarOpen}
@@ -90,13 +90,13 @@ export default function AuthenticatedLayout({ header, children }) {
 
             <div className="flex-1 flex flex-col min-w-0 h-screen overflow-hidden">
                 {/* Header Navbar */}
-                <header className="h-16 bg-white border-b border-slate-200 flex items-center px-4 sm:px-6 lg:px-8 shrink-0 z-10 w-full relative sm:drop-shadow-sm justify-between transition-colors">
+                <header className="h-16 bg-white border-b border-[#EAE6DF] flex items-center px-4 sm:px-6 lg:px-8 shrink-0 z-10 w-full relative sm:drop-shadow-sm justify-between transition-colors">
                     {/* Sidebar Buttons & Page Title */}
                     <div className="flex items-center">
                         {/* Mobile Menu Button */}
                         <button
                             onClick={() => setSidebarOpen(!sidebarOpen)}
-                            className="md:hidden p-2 -ml-2 rounded-md text-slate-400 hover:text-slate-500 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                            className="md:hidden p-2 -ml-2 rounded-md text-slate-400 hover:text-slate-500 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-[#C9A24B]"
                             aria-label="Open navigation menu"
                         >
                             <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -107,7 +107,7 @@ export default function AuthenticatedLayout({ header, children }) {
                         {/* Desktop Sidebar Collapse Toggle */}
                         <button
                             onClick={toggleSidebarCollapse}
-                            className="hidden md:inline-flex items-center justify-center p-2 -ml-2 mr-2 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"
+                            className="hidden md:inline-flex items-center justify-center p-2 -ml-2 mr-2 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-[#C9A24B] transition-colors"
                             title={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
                             aria-label={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
                         >
@@ -120,7 +120,7 @@ export default function AuthenticatedLayout({ header, children }) {
 
                         {/* Page title injected from props or just use header */}
                         {header && (
-                            <div className="ml-2 md:ml-0 font-semibold text-slate-800 text-lg sm:text-xl truncate">
+                            <div className="ml-2 md:ml-0 font-serif font-medium text-slate-800 text-lg sm:text-xl truncate">
                                 {header}
                             </div>
                         )}
@@ -134,7 +134,7 @@ export default function AuthenticatedLayout({ header, children }) {
                                     <span className="inline-flex rounded-md cursor-pointer">
                                         <button
                                             type="button"
-                                            className="inline-flex items-center rounded-full bg-white p-1 pe-3 text-sm font-medium text-slate-600 hover:bg-slate-50 focus:outline-none transition-colors border border-slate-200 shadow-sm"
+                                            className="inline-flex items-center rounded-full bg-white p-1 pe-3 text-sm font-medium text-slate-600 hover:bg-slate-50 focus:outline-none transition-colors border border-[#EAE6DF] shadow-sm"
                                         >
                                             <div className="h-8 w-8 rounded-full bg-slate-800 text-white flex items-center justify-center font-bold mr-2 text-xs">
                                                 {user?.name?.charAt(0) || '?'}
@@ -169,7 +169,7 @@ export default function AuthenticatedLayout({ header, children }) {
                     ></div>
                 )}
 
-                <main className="flex-1 overflow-y-auto w-full relative bg-slate-50 pb-10 transition-colors">
+                <main className="flex-1 overflow-y-auto w-full relative bg-[#FBFAF6] pb-10 transition-colors">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
                         {children}
                     </div>

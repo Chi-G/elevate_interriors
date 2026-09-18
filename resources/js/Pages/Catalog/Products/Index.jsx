@@ -86,37 +86,37 @@ export default function Index({ products, categories, suppliers, filters }) {
         <AuthenticatedLayout header="Product Catalog">
             <Head title="Products" />
 
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
                 <div>
-                    <h1 className="text-2xl font-bold text-slate-800">Inventory Items</h1>
-                    <p className="text-slate-500 mt-1">Manage physical stock, barcodes, and product details.</p>
+                    <h1 className="text-3xl font-serif font-medium text-[#1E1B18] tracking-tight">Product Catalog</h1>
+                    <p className="text-slate-500 mt-1 text-sm font-normal">Manage physical stock, barcodes, and product details.</p>
                 </div>
                 <div className="flex gap-3">
                     {auth.can['products.export'] && (
                         <a 
                             href={route('products.export', { slug: usePage().props.auth.user.slug })} 
-                            className="h-11 px-6 bg-white text-slate-700 border border-slate-200 rounded-xl font-bold flex items-center gap-2 hover:bg-slate-50 transition-all shadow-sm"
+                            className="h-11 px-5 bg-white text-slate-700 border border-[#EAE6DF] rounded-xl font-medium text-sm flex items-center gap-2 hover:bg-[#FAF8F5] transition-all shadow-sm"
                         >
-                            <Download className="w-5 h-5 text-slate-400" />
+                            <Download className="w-4 h-4 text-slate-400" />
                             Export CSV
                         </a>
                     )}
                     {auth.can['products.create'] && (
                         <Link href={route('products.create', { slug: auth.user.slug })}>
-                            <PrimaryButton className="h-11 px-6 bg-indigo-600 hover:bg-indigo-700 flex items-center gap-2 shadow-sm border-transparent transition-all hover:scale-[1.02]">
+                            <PrimaryButton className="h-11 px-5 bg-[#B8874A] hover:bg-[#A3743B] flex items-center gap-2 shadow-sm border-transparent transition-all">
                                 <Plus className="w-5 h-5" />
-                                Add Product
+                                Add product
                             </PrimaryButton>
                         </Link>
                     )}
                 </div>
             </div>
 
-            <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm mb-6 flex flex-col md:flex-row gap-4 items-center">
+            <div className="bg-white p-4 rounded-2xl border border-[#EAE6DF] shadow-sm mb-6 flex flex-col md:flex-row gap-4 items-center">
                 <div className="relative flex-1 w-full">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                     <TextInput
-                        className="w-full pl-10 h-11 bg-slate-50 border-transparent focus:bg-white focus:ring-indigo-500/20"
+                        className="w-full pl-10 h-11 bg-[#FAF8F5] border-transparent focus:bg-white focus:ring-[#C9A24B]/30"
                         placeholder="Search by SKU or Product Name..."
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
@@ -125,7 +125,7 @@ export default function Index({ products, categories, suppliers, filters }) {
                 <div className="flex flex-col md:flex-row items-center gap-2 w-full md:w-auto">
                     <Filter className="w-4 h-4 text-slate-400 ml-2" />
                     <select
-                        className="h-11 border-transparent bg-slate-50 rounded-xl text-sm font-medium text-slate-600 focus:ring-indigo-500/20 min-w-[180px]"
+                        className="h-11 border-transparent bg-[#FAF8F5] rounded-xl text-sm font-medium text-slate-600 focus:ring-[#C9A24B]/30 min-w-[180px]"
                         value={parentCategoryId}
                         onChange={(e) => {
                             setParentCategoryId(e.target.value);
@@ -141,7 +141,7 @@ export default function Index({ products, categories, suppliers, filters }) {
                     </select>
 
                     <select
-                        className={`h-11 border-transparent bg-slate-50 rounded-xl text-sm font-medium text-slate-600 focus:ring-indigo-500/20 min-w-[180px] transition-opacity ${!parentCategoryId ? 'opacity-50 cursor-not-allowed' : 'opacity-100'}`}
+                        className={`h-11 border-transparent bg-[#FAF8F5] rounded-xl text-sm font-medium text-slate-600 focus:ring-[#C9A24B]/30 min-w-[180px] transition-opacity ${!parentCategoryId ? 'opacity-50 cursor-not-allowed' : 'opacity-100'}`}
                         value={categoryId}
                         onChange={(e) => setCategoryId(e.target.value)}
                         disabled={!parentCategoryId}
@@ -156,26 +156,28 @@ export default function Index({ products, categories, suppliers, filters }) {
                 </div>
             </div>
 
-            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+            {/* Desktop Table View */}
+            <div className="bg-white rounded-3xl border border-[#EAE6DF] shadow-sm overflow-hidden text-sm">
                 <div className="overflow-x-auto">
                     <table className="w-full text-left border-collapse">
                         <thead>
-                            <tr className="bg-slate-50/50">
-                                <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Product</th>
-                                <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Category</th>
-                                <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">SKU / Barcode</th>
-                                <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Retail Price</th>
+                            <tr className="bg-[#FAF8F5]/80 border-b border-[#EAE6DF]">
+                                <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest">Product</th>
+                                <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest">Category</th>
+                                <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest">SKU & Barcode</th>
+                                <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest">Pricing</th>
+                                <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest">Inventory</th>
                                 {(auth.can['products.edit'] || auth.can['products.delete'] || auth.can['products.barcode'] || auth.can['inventory.adjust']) && (
-                                    <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-right">Actions</th>
+                                    <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest text-right">Actions</th>
                                 )}
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-slate-100">
+                        <tbody className="divide-y divide-[#F2EFE9]">
                             {products.data.map((product) => (
-                                <tr key={product.id} className="hover:bg-slate-50/20 transition-colors group">
+                                <tr key={product.id} className="hover:bg-[#FAF8F5]/50 transition-colors group">
                                     <td className="px-6 py-5">
-                                        <div className="flex items-center gap-4">
-                                            <div className="h-14 w-14 rounded-xl border border-slate-100 bg-slate-50 overflow-hidden flex items-center justify-center shrink-0">
+                                        <div className="flex items-center gap-3">
+                                            <div className="h-12 w-12 rounded-2xl bg-[#FAF8F5] border border-[#EAE6DF] flex items-center justify-center overflow-hidden shrink-0">
                                                 {product.image_url ? (
                                                     <img src={product.image_url} alt={product.name} className="h-full w-full object-cover" />
                                                 ) : (
@@ -195,7 +197,7 @@ export default function Index({ products, categories, suppliers, filters }) {
                                                     {product.category.parent.name}
                                                 </span>
                                             )}
-                                            <span className="px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-[11px] font-bold ring-1 ring-indigo-100 w-fit">
+                                            <span className="px-3 py-1 bg-[#FBF7EE] text-[#B8874A] rounded-full text-[11px] font-semibold ring-1 ring-[#F0E6D2] w-fit">
                                                 {product.category?.name || 'Uncategorized'}
                                             </span>
                                         </div>
@@ -217,7 +219,7 @@ export default function Index({ products, categories, suppliers, filters }) {
                                                 {product.current_stock} pcs
                                             </span>
                                             {product.current_stock <= product.alert_threshold && (
-                                                <span className="text-[9px] bg-amber-50 text-amber-600 px-1 rounded font-black uppercase">Low</span>
+                                                <span className="text-[9px] bg-amber-50 text-amber-700 px-1.5 py-0.5 rounded font-bold uppercase">Low</span>
                                             )}
                                         </div>
                                     </td>
@@ -227,7 +229,7 @@ export default function Index({ products, categories, suppliers, filters }) {
                                                 {auth.can['products.edit'] && (
                                                     <Link 
                                                         href={route('products.edit', { product: product.id, slug: auth.user.slug })}
-                                                        className="h-9 w-9 flex items-center justify-center rounded-lg text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 transition-all"
+                                                        className="h-9 w-9 flex items-center justify-center rounded-lg text-slate-400 hover:text-[#B8874A] hover:bg-[#FBF7EE] transition-all"
                                                     >
                                                         <Edit2 className="w-4 h-4" />
                                                     </Link>
@@ -244,15 +246,15 @@ export default function Index({ products, categories, suppliers, filters }) {
                                                                 onClick={() => window.open(route('products.print', { product: product.id, slug: auth.user.slug }), '_blank')}
                                                                 className="w-full text-left px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 flex items-center gap-2"
                                                             >
-                                                                <Printer className="w-4 h-4" /> Print Label
+                                                                <Printer className="w-4 h-4" /> Print label
                                                             </button>
                                                         )}
                                                         {auth.can['inventory.adjust'] && (
                                                             <button 
                                                                 onClick={() => openAdjustModal(product)}
-                                                                className="w-full text-left px-4 py-2 text-sm text-indigo-600 hover:bg-slate-50 flex items-center gap-2"
+                                                                className="w-full text-left px-4 py-2 text-sm text-[#B8874A] hover:bg-[#FBF7EE] flex items-center gap-2 font-medium"
                                                             >
-                                                                <RefreshCcw className="w-4 h-4" /> Adjust Stock
+                                                                <RefreshCcw className="w-4 h-4" /> Adjust stock
                                                             </button>
                                                         )}
                                                         {auth.can['products.delete'] && (
@@ -285,9 +287,9 @@ export default function Index({ products, categories, suppliers, filters }) {
                     </table>
                 </div>
                 
-                {/* Pagination (Simple for now) */}
+                {/* Pagination */}
                 {products.links.length > 3 && (
-                    <div className="px-6 py-4 bg-slate-50/50 border-t border-slate-100 flex justify-center gap-2">
+                    <div className="px-6 py-4 bg-[#FAF8F5]/80 border-t border-[#EAE6DF] flex justify-center gap-2">
                         {products.links.map((link, i) => (
                             <Link
                                 key={i}
@@ -295,10 +297,10 @@ export default function Index({ products, categories, suppliers, filters }) {
                                 preserveScroll
                                 preserveState
                                 dangerouslySetInnerHTML={{ __html: link.label }}
-                                className={`px-4 py-2 rounded-xl text-sm font-bold transition-all ${
+                                className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all ${
                                     link.active 
-                                        ? 'bg-indigo-600 text-white shadow-md' 
-                                        : 'text-slate-500 hover:bg-white hover:text-indigo-600 border border-transparent hover:border-indigo-100'
+                                        ? 'bg-[#B8874A] text-white shadow-md' 
+                                        : 'text-slate-500 hover:bg-white hover:text-[#B8874A] border border-transparent hover:border-[#F0E6D2]'
                                 } ${!link.url ? 'opacity-50 cursor-not-allowed' : ''}`}
                             />
                         ))}
@@ -316,7 +318,7 @@ export default function Index({ products, categories, suppliers, filters }) {
                             <InputLabel htmlFor="type" value="Adjustment Type" />
                             <select
                                 id="type"
-                                className="mt-1 block w-full border-slate-200 rounded-xl focus:border-indigo-500 focus:ring-indigo-500"
+                                className="mt-1 block w-full border-[#EAE6DF] rounded-xl focus:border-[#C9A24B] focus:ring-[#C9A24B] text-sm"
                                 value={data.type}
                                 onChange={e => setData('type', e.target.value)}
                                 required
@@ -333,7 +335,7 @@ export default function Index({ products, categories, suppliers, filters }) {
                             <TextInput
                                 id="quantity"
                                 type="number"
-                                className="mt-1 block w-full"
+                                className="mt-1 block w-full border-[#EAE6DF] focus:border-[#C9A24B] focus:ring-[#C9A24B]"
                                 value={data.quantity}
                                 onChange={e => setData('quantity', e.target.value)}
                                 min="1"
@@ -348,7 +350,7 @@ export default function Index({ products, categories, suppliers, filters }) {
                                 <InputLabel htmlFor="supplier_id" value="Supplier (Optional)" />
                                 <select
                                     id="supplier_id"
-                                    className="mt-1 block w-full border-slate-200 rounded-xl focus:border-indigo-500 focus:ring-indigo-500"
+                                    className="mt-1 block w-full border-[#EAE6DF] rounded-xl focus:border-[#C9A24B] focus:ring-[#C9A24B] text-sm"
                                     value={data.supplier_id}
                                     onChange={e => setData('supplier_id', e.target.value)}
                                 >
@@ -366,7 +368,7 @@ export default function Index({ products, categories, suppliers, filters }) {
                             <TextInput
                                 id="notes"
                                 type="text"
-                                className="mt-1 block w-full"
+                                className="mt-1 block w-full border-[#EAE6DF] focus:border-[#C9A24B] focus:ring-[#C9A24B]"
                                 value={data.notes}
                                 onChange={e => setData('notes', e.target.value)}
                                 placeholder={data.type === 'IN' ? 'PO#1234...' : 'Broken item, auditing, etc...'}
@@ -379,8 +381,8 @@ export default function Index({ products, categories, suppliers, filters }) {
                         <SecondaryButton onClick={closeAdjustModal} disabled={processing}>
                             Cancel
                         </SecondaryButton>
-                        <PrimaryButton disabled={processing} className="bg-indigo-600 hover:bg-indigo-700">
-                            Process Adjustment
+                        <PrimaryButton disabled={processing} className="bg-[#B8874A] hover:bg-[#A3743B]">
+                            Process adjustment
                         </PrimaryButton>
                     </div>
                 </form>

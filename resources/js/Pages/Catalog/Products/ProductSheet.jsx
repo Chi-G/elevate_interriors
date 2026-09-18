@@ -14,26 +14,26 @@ export default function ProductSheet({ product }) {
     }, []);
 
     return (
-        <div className="min-h-screen bg-slate-50 p-4 md:p-12">
+        <div className="min-h-screen bg-[#FBFAF6] p-4 md:p-12">
             <Head title={`Product Information Sheet: ${product.sku}`} />
             
-            <div className="max-w-4xl mx-auto no-print mb-8 flex justify-between items-center bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+            <div className="max-w-4xl mx-auto no-print mb-8 flex justify-between items-center bg-white p-6 rounded-3xl border border-[#EAE6DF] shadow-sm">
                 <div>
-                    <h2 className="text-2xl font-bold text-slate-800">Print Preview</h2>
-                    <p className="text-slate-500 font-medium mt-1">Professional product datasheet optimized for A4/Letter sheets.</p>
+                    <h2 className="text-2xl font-serif font-medium text-[#1E1B18] tracking-tight">Print preview</h2>
+                    <p className="text-slate-500 text-sm mt-1">Professional product datasheet optimized for A4/Letter sheets.</p>
                 </div>
                 
                 <div className="flex gap-4">
                     <button 
                         onClick={() => window.print()}
-                        className="px-6 py-3 bg-indigo-600 text-white rounded-xl font-bold shadow-lg shadow-indigo-200 hover:bg-indigo-700 transition-all flex items-center gap-2"
+                        className="px-6 py-3 bg-[#B8874A] text-white rounded-xl font-medium shadow-md hover:bg-[#A3743B] focus:ring-2 focus:ring-[#C9A24B] transition-all flex items-center gap-2"
                     >
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" /></svg>
-                        Print Document
+                        Print document
                     </button>
                     <button 
                         onClick={() => window.close()}
-                        className="px-6 py-3 bg-white border border-slate-200 text-slate-600 rounded-xl font-bold hover:bg-slate-50 transition-all"
+                        className="px-6 py-3 bg-white border border-[#EAE6DF] text-slate-600 rounded-xl font-medium hover:bg-slate-50 transition-all"
                     >
                         Close
                     </button>
@@ -81,11 +81,11 @@ export default function ProductSheet({ product }) {
                             
                             <div className="flex gap-8 items-center pt-4">
                                 <div className="flex items-center gap-2">
-                                    <Layers className="w-5 h-5 text-indigo-500" />
+                                    <Layers className="w-5 h-5 text-[#B8874A]" />
                                     <span className="font-bold text-slate-700">{product.category?.name || 'Uncategorized'}</span>
                                 </div>
                                 <div className="flex items-center gap-2">
-                                    <Tag className="w-5 h-5 text-indigo-500" />
+                                    <Tag className="w-5 h-5 text-[#B8874A]" />
                                     <span className="font-mono font-bold text-slate-700">{product.barcode_value}</span>
                                 </div>
                             </div>
@@ -111,7 +111,10 @@ export default function ProductSheet({ product }) {
                             <DollarSign className="w-4 h-4 text-slate-400" />
                             <span className="text-xs font-black uppercase text-slate-400 tracking-wider">Retail Value</span>
                         </div>
-                        <p className="text-3xl font-black text-slate-900 leading-none">₦{parseFloat(product.retail_price).toLocaleString()}</p>
+                        <p className="text-3xl font-black text-slate-900 leading-none">
+                            <span className="font-sans font-medium text-slate-400 mr-1 select-none text-2xl">₦</span>
+                            {parseFloat(product.retail_price).toLocaleString()}
+                        </p>
                     </div>
 
                     <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100 flex flex-col justify-between">
@@ -136,18 +139,18 @@ export default function ProductSheet({ product }) {
                 {/* Description & Attributes */}
                 <div className="grid grid-cols-5 gap-8 mb-12">
                     <div className="col-span-3">
-                        <h3 className="text-xs font-black uppercase text-indigo-600 tracking-[0.2em] mb-4 flex items-center gap-2">
+                        <h3 className="text-xs font-black uppercase text-[#B8874A] tracking-[0.2em] mb-4 flex items-center gap-2">
                              Full Description
-                             <div className="h-0.5 flex-1 bg-indigo-50"></div>
+                             <div className="h-0.5 flex-1 bg-[#FBF7EE]"></div>
                         </h3>
                         <p className="text-slate-600 text-sm leading-relaxed whitespace-pre-wrap">
                             {product.description || 'No detailed description provided for this catalog item.'}
                         </p>
                     </div>
                     <div className="col-span-2">
-                         <h3 className="text-xs font-black uppercase text-indigo-600 tracking-[0.2em] mb-4 flex items-center gap-2">
+                         <h3 className="text-xs font-black uppercase text-[#B8874A] tracking-[0.2em] mb-4 flex items-center gap-2">
                              Specifications
-                             <div className="h-0.5 flex-1 bg-indigo-50"></div>
+                             <div className="h-0.5 flex-1 bg-[#FBF7EE]"></div>
                         </h3>
                         <div className="space-y-3">
                             {product.attributes && Object.entries(product.attributes).length > 0 ? (

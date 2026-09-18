@@ -67,7 +67,7 @@ export default function Index({ categories, parentCategories }) {
             text: "This category will be permanently deleted!",
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#4f46e5',
+            confirmButtonColor: '#B8874A',
             cancelButtonColor: '#ef4444',
             confirmButtonText: 'Yes, delete it!'
         }).then((result) => {
@@ -83,17 +83,17 @@ export default function Index({ categories, parentCategories }) {
 
             <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-8">
                 <div>
-                    <h1 className="text-2xl font-bold text-slate-800">Product Categories</h1>
-                    <p className="text-slate-500 mt-1">Organize your interior inventory by type and style.</p>
+                    <h1 className="text-3xl font-serif font-medium text-[#1E1B18] tracking-tight">Categories & Taxonomy</h1>
+                    <p className="text-slate-500 text-sm mt-1">Organize your interior inventory by type and style.</p>
                 </div>
                 {auth.can['categories.create'] && (
                     <div className="flex-shrink-0">
                         <PrimaryButton
                             onClick={openCreateModal}
-                            className="w-full md:w-auto h-11 px-6 bg-indigo-600 hover:bg-indigo-700 flex items-center justify-center gap-2"
+                            className="w-full md:w-auto h-11 px-6 bg-[#B8874A] hover:bg-[#A3743B] focus:ring-2 focus:ring-[#C9A24B] flex items-center justify-center gap-2 border-transparent text-sm"
                         >
                             <Plus className="w-5 h-5" />
-                            New Category
+                            New category
                         </PrimaryButton>
                     </div>
                 )}
@@ -101,17 +101,17 @@ export default function Index({ categories, parentCategories }) {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {categories.data.map((category) => (
-                    <div key={category.id} className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all group overflow-hidden relative">
+                    <div key={category.id} className="bg-white p-6 rounded-2xl border border-[#EAE6DF] shadow-sm hover:shadow-md transition-all group overflow-hidden relative">
                         <div className="absolute top-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity flex gap-2">
                             {auth.can['categories.edit'] && (
-                                <button onClick={() => openEditModal(category)} className="p-2 bg-slate-50 hover:bg-indigo-50 text-slate-400 hover:text-indigo-600 rounded-lg border border-slate-100 transition-colors">
+                                <button onClick={() => openEditModal(category)} className="p-2 bg-slate-50 hover:bg-[#FBF7EE] text-slate-400 hover:text-[#B8874A] rounded-lg border border-slate-100 transition-colors">
                                     <Edit className="w-4 h-4" />
                                 </button>
                             )}
                         </div>
 
                         <div className="flex items-center gap-2 mb-4">
-                            <div className="h-10 w-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
+                            <div className="h-10 w-10 rounded-xl bg-[#FBF7EE] text-[#B8874A] flex items-center justify-center">
                                 {category.parent_id ? <Layers className="w-5 h-5" /> : <List className="w-5 h-5" />}
                             </div>
                             {category.parent && (
@@ -127,11 +127,11 @@ export default function Index({ categories, parentCategories }) {
                             {category.description || 'No description provided.'}
                         </p>
 
-                        <div className="mt-6 pt-4 border-t border-slate-50 flex justify-between items-center">
+                        <div className="mt-6 pt-4 border-t border-slate-100 flex justify-between items-center">
                             <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
                                 {category.children_count || 0} Sub-categories
                             </span>
-                            <span className="text-[10px] px-2 py-1 rounded-md font-bold uppercase bg-emerald-50 text-emerald-600">
+                            <span className="text-[10px] px-2.5 py-1 rounded-md font-bold uppercase bg-[#FBF7EE] text-[#B8874A]">
                                 Main Category
                             </span>
                         </div>
@@ -145,7 +145,7 @@ export default function Index({ categories, parentCategories }) {
                         </div>
                         <h3 className="text-lg font-semibold text-slate-600">No categories yet</h3>
                         <p className="text-slate-400 mt-1 max-w-xs">Start by adding your first product category to organize your warehouse.</p>
-                        <PrimaryButton onClick={openCreateModal} className="mt-6 bg-slate-800">Add Category</PrimaryButton>
+                        <PrimaryButton onClick={openCreateModal} className="mt-6 bg-[#B8874A] hover:bg-[#A3743B] focus:ring-[#C9A24B]">Add category</PrimaryButton>
                     </div>
                 )}
             </div>
@@ -160,9 +160,9 @@ export default function Index({ categories, parentCategories }) {
                             preserveScroll
                             preserveState
                             dangerouslySetInnerHTML={{ __html: link.label }}
-                            className={`px-4 py-2 rounded-xl text-sm font-bold transition-all ${link.active
-                                    ? 'bg-indigo-600 text-white shadow-md'
-                                    : 'text-slate-500 hover:bg-white hover:text-indigo-600 border border-transparent hover:border-indigo-100'
+                            className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${link.active
+                                    ? 'bg-[#B8874A] text-white shadow-sm'
+                                    : 'text-slate-500 hover:bg-white hover:text-[#B8874A] border border-transparent hover:border-[#D9C4A1]'
                                 } ${!link.url ? 'opacity-50 cursor-not-allowed' : ''}`}
                         />
                     ))}
@@ -172,14 +172,14 @@ export default function Index({ categories, parentCategories }) {
             {/* Create Modal */}
             <Modal show={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)}>
                 <form onSubmit={handleCreate} className="p-8">
-                    <h2 className="text-xl font-bold text-slate-900 mb-6">Create New Category</h2>
+                    <h2 className="text-xl font-serif font-medium text-[#1E1B18] mb-6">Create New Category</h2>
 
                     <div className="space-y-5">
                         <div>
                             <InputLabel htmlFor="name" value="Category Name" className="text-slate-600" />
                             <TextInput
                                 id="name"
-                                className="mt-1 block w-full bg-slate-50 border-slate-200 focus:bg-white"
+                                className="mt-1 block w-full bg-slate-50 border-slate-200 focus:bg-white focus:border-[#C9A24B] focus:ring-[#C9A24B]"
                                 value={data.name}
                                 onChange={(e) => setData('name', e.target.value)}
                                 placeholder="e.g. Living Room Furniture"
@@ -192,7 +192,7 @@ export default function Index({ categories, parentCategories }) {
                             <InputLabel htmlFor="parent_id" value="Parent Category (Optional)" className="text-slate-600" />
                             <select
                                 id="parent_id"
-                                className="mt-1 block w-full rounded-xl border-slate-200 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 bg-slate-50 focus:bg-white"
+                                className="mt-1 block w-full rounded-xl border-slate-200 shadow-sm focus:border-[#C9A24B] focus:ring-[#C9A24B] bg-slate-50 focus:bg-white"
                                 value={data.parent_id}
                                 onChange={(e) => setData('parent_id', e.target.value)}
                             >
@@ -208,7 +208,7 @@ export default function Index({ categories, parentCategories }) {
                             <InputLabel htmlFor="description" value="Description" className="text-slate-600" />
                             <textarea
                                 id="description"
-                                className="mt-1 block w-full rounded-xl border-slate-200 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 bg-slate-50 focus:bg-white min-h-[100px]"
+                                className="mt-1 block w-full rounded-xl border-slate-200 shadow-sm focus:border-[#C9A24B] focus:ring-[#C9A24B] bg-slate-50 focus:bg-white min-h-[100px]"
                                 value={data.description}
                                 onChange={(e) => setData('description', e.target.value)}
                                 placeholder="Describe the type of products in this category..."
@@ -219,7 +219,7 @@ export default function Index({ categories, parentCategories }) {
 
                     <div className="mt-10 flex justify-end gap-3">
                         <SecondaryButton onClick={() => setIsCreateModalOpen(false)} className="border-slate-200 text-slate-600">Cancel</SecondaryButton>
-                        <PrimaryButton disabled={processing} className="bg-indigo-600 h-11 px-6">Save Category</PrimaryButton>
+                        <PrimaryButton disabled={processing} className="bg-[#B8874A] hover:bg-[#A3743B] focus:ring-[#C9A24B] h-11 px-6">Create category</PrimaryButton>
                     </div>
                 </form>
             </Modal>
@@ -228,7 +228,7 @@ export default function Index({ categories, parentCategories }) {
             <Modal show={isEditModalOpen} onClose={() => setIsEditModalOpen(false)}>
                 <form onSubmit={handleEdit} className="p-8">
                     <div className="flex justify-between items-start mb-6">
-                        <h2 className="text-xl font-bold text-slate-900">Edit Category</h2>
+                        <h2 className="text-xl font-serif font-medium text-[#1E1B18]">Edit Category</h2>
                         {auth.can['categories.delete'] && (
                             <button
                                 type="button"
@@ -238,7 +238,7 @@ export default function Index({ categories, parentCategories }) {
                                         text: "This category will be permanently deleted!",
                                         icon: 'warning',
                                         showCancelButton: true,
-                                        confirmButtonColor: '#4f46e5',
+                                        confirmButtonColor: '#B8874A',
                                         cancelButtonColor: '#ef4444',
                                         confirmButtonText: 'Yes, delete it!'
                                     }).then((result) => {
@@ -261,7 +261,7 @@ export default function Index({ categories, parentCategories }) {
                             <InputLabel htmlFor="edit_name" value="Category Name" />
                             <TextInput
                                 id="edit_name"
-                                className="mt-1 block w-full bg-slate-50 border-slate-200 focus:bg-white"
+                                className="mt-1 block w-full bg-slate-50 border-slate-200 focus:bg-white focus:border-[#C9A24B] focus:ring-[#C9A24B]"
                                 value={data.name}
                                 onChange={(e) => setData('name', e.target.value)}
                                 required
@@ -273,7 +273,7 @@ export default function Index({ categories, parentCategories }) {
                             <InputLabel htmlFor="edit_parent_id" value="Parent Category" />
                             <select
                                 id="edit_parent_id"
-                                className="mt-1 block w-full rounded-xl border-slate-200 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 bg-slate-50 focus:bg-white"
+                                className="mt-1 block w-full rounded-xl border-slate-200 shadow-sm focus:border-[#C9A24B] focus:ring-[#C9A24B] bg-slate-50 focus:bg-white"
                                 value={data.parent_id}
                                 onChange={(e) => setData('parent_id', e.target.value)}
                             >
@@ -292,7 +292,7 @@ export default function Index({ categories, parentCategories }) {
                             <InputLabel htmlFor="edit_description" value="Description" />
                             <textarea
                                 id="edit_description"
-                                className="mt-1 block w-full rounded-xl border-slate-200 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 bg-slate-50 focus:bg-white min-h-[100px]"
+                                className="mt-1 block w-full rounded-xl border-slate-200 shadow-sm focus:border-[#C9A24B] focus:ring-[#C9A24B] bg-slate-50 focus:bg-white min-h-[100px]"
                                 value={data.description}
                                 onChange={(e) => setData('description', e.target.value)}
                             />
@@ -302,7 +302,7 @@ export default function Index({ categories, parentCategories }) {
 
                     <div className="mt-10 flex justify-end gap-3">
                         <SecondaryButton onClick={() => setIsEditModalOpen(false)}>Cancel</SecondaryButton>
-                        <PrimaryButton disabled={processing} className="bg-indigo-600 h-11 px-6">Update Category</PrimaryButton>
+                        <PrimaryButton disabled={processing} className="bg-[#B8874A] hover:bg-[#A3743B] focus:ring-[#C9A24B] h-11 px-6">Save changes</PrimaryButton>
                     </div>
                 </form>
             </Modal>

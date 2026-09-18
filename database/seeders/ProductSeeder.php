@@ -15,7 +15,9 @@ class ProductSeeder extends Seeder
     {
 
         $admin = User::first();
-        if (!$admin) return;
+        if (! $admin) {
+            return;
+        }
 
         $catalog = [
             'Furniture' => [
@@ -29,7 +31,7 @@ class ProductSeeder extends Seeder
                 ],
                 'Accent Chairs' => [
                     ['name' => 'Emerald Green Occasional Chair', 'price' => 145000, 'cost' => 95000, 'attr' => [['key' => 'Style', 'value' => 'Mid-Century']]],
-                ]
+                ],
             ],
             'Beddings' => [
                 'Duvets' => [
@@ -37,7 +39,7 @@ class ProductSeeder extends Seeder
                 ],
                 'Bedsheet Sets' => [
                     ['name' => 'Egyptian Cotton 1000TC Sheet Set', 'price' => 75000, 'cost' => 45000, 'attr' => [['key' => 'Material', 'value' => 'Cotton'], ['key' => 'Thread Count', 'value' => '1000']]],
-                ]
+                ],
             ],
             'Lighting' => [
                 'Table Lamps' => [
@@ -45,7 +47,7 @@ class ProductSeeder extends Seeder
                 ],
                 'Wall Sconces' => [
                     ['name' => 'Modern Gold Linear Sconce', 'price' => 45000, 'cost' => 25000],
-                ]
+                ],
             ],
             'Home Decor' => [
                 'Vases' => [
@@ -54,7 +56,7 @@ class ProductSeeder extends Seeder
                 ],
                 'Figurines' => [
                     ['name' => 'Abstract Resin Panther', 'price' => 28000, 'cost' => 12000],
-                ]
+                ],
             ],
             'Fragrance' => [
                 'Scented Candles' => [
@@ -62,18 +64,20 @@ class ProductSeeder extends Seeder
                 ],
                 'Diffusers' => [
                     ['name' => 'Ultrasonic Ceramic Humidifier', 'price' => 35000, 'cost' => 20000],
-                ]
+                ],
             ],
             'Plants' => [
                 'Artificial Plants' => [
                     ['name' => 'Fiddle Leaf Fig - 180cm', 'price' => 75000, 'cost' => 40000, 'attr' => [['key' => 'Height', 'value' => '180cm']]],
-                ]
-            ]
+                ],
+            ],
         ];
 
         foreach ($catalog as $parentName => $subs) {
             $parentCat = Category::where('name', $parentName)->first();
-            if (!$parentCat) continue;
+            if (! $parentCat) {
+                continue;
+            }
 
             foreach ($subs as $subName => $products) {
                 $subCat = Category::where('name', $subName)->where('parent_id', $parentCat->id)->first() ?: $parentCat;
@@ -83,8 +87,8 @@ class ProductSeeder extends Seeder
                         ->where('category_id', $subCat->id)
                         ->first();
 
-                    $sku = $productExists ? $productExists->sku : strtoupper(substr($parentName, 0, 3)) . '-' . strtoupper(substr($subName, 0, 3)) . '-' . Str::random(4);
-                    
+                    $sku = $productExists ? strtoupper($productExists->sku) : strtoupper(substr($parentName, 0, 3)).'-'.strtoupper(substr($subName, 0, 3)).'-'.strtoupper(Str::random(4));
+
                     $product = Product::updateOrCreate(
                         ['name' => $pData['name'], 'category_id' => $subCat->id],
                         [
@@ -104,7 +108,7 @@ class ProductSeeder extends Seeder
                         ->where('notes', 'Initial inventory seed.')
                         ->exists();
 
-                    if (!$hasSeedMovement) {
+                    if (! $hasSeedMovement) {
                         StockMovement::create([
                             'product_id' => $product->id,
                             'user_id' => $admin->id,
@@ -121,7 +125,7 @@ class ProductSeeder extends Seeder
         // This fixes instances where stock was added previously while events were disabled
         foreach (Product::all() as $product) {
             $actualStock = StockMovement::where('product_id', $product->id)->sum('quantity');
-            $product->update(['current_stock' => (int)$actualStock]);
+            $product->update(['current_stock' => (int) $actualStock]);
         }
     }
 }

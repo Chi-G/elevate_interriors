@@ -1,7 +1,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, useForm, usePage, router } from '@inertiajs/react';
 import { useState } from 'react';
-import { Plus, Edit, Trash2, Mail, User, ShieldCheck, UserCheck, Smartphone } from 'lucide-react';
+import { Plus, Edit2, Trash2, Mail, User, ShieldCheck, UserCheck, Smartphone } from 'lucide-react';
 import Modal from '@/Components/Modal';
 import InputLabel from '@/Components/InputLabel';
 import TextInput from '@/Components/TextInput';
@@ -53,7 +53,7 @@ export default function Index({ users }) {
             text: `Are you sure you want to permanently delete ${user.name}? This action cannot be reversed.`,
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#4f46e5',
+            confirmButtonColor: '#B8874A',
             cancelButtonColor: '#ef4444',
             confirmButtonText: 'Yes, Delete'
         }).then((result) => {
@@ -102,44 +102,42 @@ export default function Index({ users }) {
 
             <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-8">
                 <div>
-                    <h3 className="text-2xl font-bold text-slate-800">Staff & Users</h3>
-                    <p className="text-slate-500 mt-1">Manage platform access, roles, and staff details.</p>
+                    <h1 className="text-3xl font-serif font-medium text-[#1E1B18] tracking-tight">Staff & Users</h1>
+                    <p className="text-slate-500 mt-1 text-sm font-normal">Manage platform access, roles, and staff details.</p>
                 </div>
                 {auth.can['users.create'] && (
                     <PrimaryButton 
                         onClick={openCreateModal} 
-                        className="w-full md:w-auto h-11 px-6 bg-indigo-600 border-transparent hover:bg-indigo-700 flex items-center justify-center gap-2 shadow-sm transition-all active:scale-95"
+                        className="w-full md:w-auto h-11 px-6 bg-[#B8874A] border-transparent hover:bg-[#A3743B] flex items-center justify-center gap-2 shadow-sm transition-all active:scale-95 cursor-pointer"
                     >
                         <Plus className="w-5 h-5" />
-                        New User
+                        New user
                     </PrimaryButton>
                 )}
             </div>
 
-
-
             {/* Desktop View - Table */}
-            <div className="hidden md:block bg-white rounded-3xl border border-slate-200 shadow-sm overflow-x-auto text-sm">
+            <div className="hidden md:block bg-white rounded-3xl border border-[#EAE6DF] shadow-sm overflow-x-auto text-sm">
                 <table className="w-full text-left border-collapse min-w-[800px] lg:min-w-full">
-                    <thead className="bg-slate-50/50">
+                    <thead className="bg-[#FAF8F5]/80">
                         <tr>
-                            <th className="px-6 py-5 text-xs font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 italic">User Profile</th>
-                            <th className="px-6 py-5 text-xs font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 italic">Role</th>
-                            <th className="px-6 py-5 text-xs font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 italic">Status</th>
-                            <th className="px-6 py-5 text-right text-xs font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 italic">Actions</th>
+                            <th className="px-6 py-5 text-xs font-bold text-slate-400 uppercase tracking-widest border-b border-[#EAE6DF] italic">User Profile</th>
+                            <th className="px-6 py-5 text-xs font-bold text-slate-400 uppercase tracking-widest border-b border-[#EAE6DF] italic">Role</th>
+                            <th className="px-6 py-5 text-xs font-bold text-slate-400 uppercase tracking-widest border-b border-[#EAE6DF] italic">Status</th>
+                            <th className="px-6 py-5 text-right text-xs font-bold text-slate-400 uppercase tracking-widest border-b border-[#EAE6DF] italic">Actions</th>
                         </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-100">
+                    <tbody className="divide-y divide-[#F2EFE9]">
                         {users.map((u) => (
-                            <tr key={u.id} className="hover:bg-slate-50/30 transition-colors group">
+                            <tr key={u.id} className="hover:bg-[#FAF8F5]/50 transition-colors group">
                                 <td className="px-6 py-6 whitespace-nowrap">
                                     <div className="flex items-center gap-4">
-                                        <div className="h-12 w-12 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600 font-black text-lg group-hover:bg-indigo-600 group-hover:text-white transition-all shadow-sm">
+                                        <div className="h-12 w-12 rounded-2xl bg-[#FBF7EE] border border-[#F0E6D2] flex items-center justify-center text-[#B8874A] font-bold text-lg group-hover:bg-[#B8874A] group-hover:text-white group-hover:border-[#B8874A] transition-all shadow-sm">
                                             {u.name.charAt(0).toUpperCase()}
                                         </div>
                                         <div>
                                             <p className="font-bold text-slate-800 text-base leading-none">{u.name}</p>
-                                            <p className="text-slate-400 font-medium text-xs mt-1">{u.email}</p>
+                                            <p className="text-slate-400 font-normal text-xs mt-1">{u.email}</p>
                                         </div>
                                     </div>
                                 </td>
@@ -160,20 +158,20 @@ export default function Index({ users }) {
                                             <button 
                                                 onClick={() => !isProtected(u.email) && openEditModal(u)}
                                                 disabled={isProtected(u.email)}
-                                                className={`h-10 w-10 flex items-center justify-center rounded-xl border transition-all ${isProtected(u.email) ? 'bg-slate-50 border-slate-100 text-slate-200' : 'border-slate-200 text-slate-400 hover:text-indigo-600 hover:border-indigo-200 hover:bg-indigo-50'}`}
+                                                className={`h-10 w-10 flex items-center justify-center rounded-xl border transition-all ${isProtected(u.email) ? 'bg-slate-50 border-slate-100 text-slate-200' : 'border-[#EAE6DF] text-slate-400 hover:text-[#B8874A] hover:border-[#F0E6D2] hover:bg-[#FBF7EE]'}`}
                                                 title={isProtected(u.email) ? "Master account cannot be edited." : "Edit User"}
                                             >
-                                                <Edit className="w-5 h-5" />
+                                                <Edit2 className="w-4 h-4" />
                                             </button>
                                         )}
-                                        {auth.can['users.delete'] && auth.user.id !== u.id && u.role !== 'Super Admin' && (
+                                        {auth.can['users.delete'] && (
                                             <button 
-                                                onClick={() => !isProtected(u.email) && openDeleteModal(u)}
+                                                onClick={() => openDeleteModal(u)}
                                                 disabled={isProtected(u.email)}
                                                 className={`h-10 w-10 flex items-center justify-center rounded-xl border transition-all ${isProtected(u.email) ? 'bg-slate-50 border-slate-100 text-slate-200' : 'border-slate-200 text-slate-400 hover:text-red-600 hover:border-red-200 hover:bg-red-50'}`}
                                                 title={isProtected(u.email) ? "Master account cannot be deleted." : "Delete User"}
                                             >
-                                                <Trash2 className="w-5 h-5" />
+                                                <Trash2 className="w-4 h-4" />
                                             </button>
                                         )}
                                     </div>
@@ -184,18 +182,18 @@ export default function Index({ users }) {
                 </table>
             </div>
 
-            {/* Mobile View - Cards */}
-            <div className="md:hidden space-y-4">
+            {/* Mobile View - Cards List */}
+            <div className="grid grid-cols-1 gap-4 md:hidden">
                 {users.map((u) => (
-                    <div key={u.id} className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm transition-all active:scale-[0.98]">
-                        <div className="flex justify-between items-start mb-6">
-                            <div className="flex items-center gap-4">
-                                <div className="h-12 w-12 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600 font-black text-lg">
+                    <div key={u.id} className="bg-white p-5 rounded-2xl border border-[#EAE6DF] shadow-sm space-y-4">
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                                <div className="h-12 w-12 rounded-2xl bg-[#FBF7EE] border border-[#F0E6D2] flex items-center justify-center text-[#B8874A] font-bold text-lg">
                                     {u.name.charAt(0).toUpperCase()}
                                 </div>
                                 <div>
-                                    <p className="font-bold text-slate-800 text-lg leading-tight">{u.name}</p>
-                                    <span className={`mt-1 px-2.5 py-0.5 inline-flex text-[9px] font-black uppercase tracking-widest rounded-md border ${getRoleBadgeColor(u.role)}`}>
+                                    <h4 className="font-bold text-slate-900 text-base leading-tight">{u.name}</h4>
+                                    <span className={`inline-block mt-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wide uppercase border ${getRoleBadgeColor(u.role)}`}>
                                         {u.role}
                                     </span>
                                 </div>
@@ -203,29 +201,29 @@ export default function Index({ users }) {
                             <div className="flex gap-2">
                                 {auth.can['users.edit'] && (
                                     <button 
-                                        onClick={() => !isProtected(u.email) && openEditModal(u)}
+                                        onClick={() => openEditModal(u)}
                                         disabled={isProtected(u.email)}
-                                        className={`h-10 w-10 flex items-center justify-center rounded-xl transition-all ${isProtected(u.email) ? 'bg-slate-50 text-slate-200' : 'bg-indigo-50 text-indigo-600 border border-indigo-100'}`}
+                                        className={`h-10 w-10 flex items-center justify-center rounded-xl transition-all ${isProtected(u.email) ? 'bg-slate-50 text-slate-200' : 'bg-[#FBF7EE] text-[#B8874A] border border-[#F0E6D2]'}`}
                                     >
-                                        <Edit className="w-5 h-5" />
+                                        <Edit2 className="w-4 h-4" />
                                     </button>
                                 )}
-                                {auth.can['users.delete'] && auth.user.id !== u.id && u.role !== 'Super Admin' && (
+                                {auth.can['users.delete'] && (
                                     <button 
-                                        onClick={() => !isProtected(u.email) && openDeleteModal(u)}
+                                        onClick={() => openDeleteModal(u)}
                                         disabled={isProtected(u.email)}
                                         className={`h-10 w-10 flex items-center justify-center rounded-xl transition-all ${isProtected(u.email) ? 'bg-slate-50 text-slate-200' : 'bg-red-50 text-red-600 border border-red-100'}`}
                                     >
-                                        <Trash2 className="w-5 h-5" />
+                                        <Trash2 className="w-4 h-4" />
                                     </button>
                                 )}
                             </div>
                         </div>
 
-                        <div className="space-y-3 pt-5 border-t border-slate-50">
-                            <div className="flex items-center text-sm text-slate-600 gap-4 group">
-                                <div className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center shrink-0 border border-slate-100 group-hover:bg-indigo-50 group-hover:border-indigo-100 transition-all">
-                                    <Mail className="w-4 h-4 text-slate-400 group-hover:text-indigo-500" />
+                        <div className="pt-3 border-t border-[#F2EFE9] space-y-2">
+                            <div className="flex items-center gap-2.5 text-slate-500 text-xs">
+                                <div className="w-10 h-10 rounded-xl bg-[#FAF8F5] flex items-center justify-center shrink-0 border border-[#EAE6DF] group-hover:bg-[#FBF7EE] group-hover:border-[#F0E6D2] transition-all">
+                                    <Mail className="w-4 h-4 text-slate-400 group-hover:text-[#B8874A]" />
                                 </div>
                                 <span className="font-medium text-slate-700 truncate">{u.email}</span>
                             </div>
@@ -281,7 +279,7 @@ export default function Index({ users }) {
                         <InputLabel htmlFor="role" value="Access Role" />
                         <select
                             id="role"
-                            className="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
+                            className="mt-1 block w-full border-gray-300 focus:border-[#C9A24B] focus:ring-[#C9A24B] rounded-xl shadow-sm text-sm"
                             value={data.role}
                             onChange={(e) => setData('role', e.target.value)}
                             required
@@ -293,13 +291,13 @@ export default function Index({ users }) {
                         <InputError className="mt-2" message={errors.role} />
                     </div>
                     
-                    <p className="mt-4 text-xs text-slate-500 bg-slate-50 p-2 rounded border border-slate-100">
+                    <p className="mt-4 text-xs text-slate-500 bg-[#FAF8F5] p-2.5 rounded-xl border border-[#EAE6DF]">
                         The user's default password will be <strong className="text-slate-700">password123</strong>. They should change this upon their first login.
                     </p>
 
                     <div className="mt-6 flex justify-end gap-3">
                         <SecondaryButton onClick={() => setIsCreateModalOpen(false)}>Cancel</SecondaryButton>
-                        <PrimaryButton disabled={processing}>Create User</PrimaryButton>
+                        <PrimaryButton disabled={processing}>Create user</PrimaryButton>
                     </div>
                 </form>
             </Modal>
@@ -343,7 +341,7 @@ export default function Index({ users }) {
                             <InputLabel htmlFor="edit_role" value="Access Role" />
                             <select
                                 id="edit_role"
-                                className="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
+                                className="mt-1 block w-full border-gray-300 focus:border-[#C9A24B] focus:ring-[#C9A24B] rounded-xl shadow-sm text-sm"
                                 value={data.role}
                                 onChange={(e) => setData('role', e.target.value)}
                                 required
@@ -358,7 +356,7 @@ export default function Index({ users }) {
 
                     <div className="mt-6 flex justify-end gap-3">
                         <SecondaryButton onClick={() => setIsEditModalOpen(false)}>Cancel</SecondaryButton>
-                        <PrimaryButton disabled={processing}>Save Changes</PrimaryButton>
+                        <PrimaryButton disabled={processing}>Save changes</PrimaryButton>
                     </div>
                 </form>
             </Modal>

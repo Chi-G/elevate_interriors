@@ -37,25 +37,25 @@ export default function Logs({ movements, filters }) {
 
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
                 <div>
-                    <h1 className="text-2xl font-bold text-slate-800">Inventory Movement Logs</h1>
-                    <p className="text-slate-500 mt-1">Audit trail of all stock additions, deductions, and adjustments.</p>
+                    <h1 className="text-3xl font-serif font-medium text-[#1E1B18] tracking-tight">Movement Logs</h1>
+                    <p className="text-slate-500 text-sm mt-1">Audit trail of all stock additions, deductions, and adjustments.</p>
                 </div>
                 {auth.can['inventory.logs.export'] && auth.user?.slug && (
                     <a 
                         href={route('inventory.logs.export', { slug: auth.user.slug })} 
-                        className="h-11 px-6 bg-slate-900 text-white rounded-xl font-bold flex items-center gap-2 hover:bg-indigo-600 transition-all shadow-lg shadow-slate-200"
+                        className="h-11 px-6 bg-slate-900 text-white rounded-xl font-medium text-sm flex items-center gap-2 hover:bg-[#B8874A] transition-all shadow-sm"
                     >
                         <Download className="w-4 h-4" />
-                        Export Log (CSV)
+                        Export CSV
                     </a>
                 )}
             </div>
 
-            <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+            <div className="bg-white rounded-3xl border border-[#EAE6DF] shadow-sm overflow-hidden">
                 <div className="overflow-x-auto">
                     <table className="w-full text-left border-collapse min-w-[1000px] lg:min-w-full">
                         <thead>
-                            <tr className="bg-slate-50 border-b border-slate-200">
+                            <tr className="bg-slate-50/50 border-b border-slate-100">
                                 <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Date & Time</th>
                                 <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Product</th>
                                 <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Type</th>
@@ -84,7 +84,7 @@ export default function Logs({ movements, filters }) {
                                             </div>
                                             <div className="min-w-0">
                                                 <p className="text-sm font-bold text-slate-800 truncate max-w-[200px]">{log.product.name}</p>
-                                                <p className="text-[10px] font-bold text-indigo-500 uppercase tracking-wider">{log.product.sku}</p>
+                                                <p className="text-[10px] font-bold text-[#B8874A] uppercase tracking-wider">{log.product.sku}</p>
                                             </div>
                                         </div>
                                     </td>
@@ -146,10 +146,10 @@ export default function Logs({ movements, filters }) {
                                 preserveScroll
                                 preserveState
                                 dangerouslySetInnerHTML={{ __html: link.label }}
-                                className={`px-4 py-2 rounded-xl text-sm font-bold transition-all ${
+                                className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${
                                     link.active 
-                                        ? 'bg-indigo-600 text-white shadow-md' 
-                                        : 'text-slate-500 hover:bg-slate-50 hover:text-indigo-600'
+                                        ? 'bg-[#B8874A] text-white shadow-sm' 
+                                        : 'text-slate-500 hover:bg-slate-50 hover:text-[#B8874A]'
                                 } ${!link.url ? 'opacity-30 cursor-not-allowed' : ''}`}
                             />
                         ))}

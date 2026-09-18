@@ -148,10 +148,15 @@ export default function Index() {
             <Head title="Scan Center" />
 
             <div className="max-w-4xl mx-auto">
-                <div className="bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden mb-8">
+                <div className="mb-8">
+                    <h1 className="text-3xl font-serif font-medium text-[#1E1B18] tracking-tight">Scan Center</h1>
+                    <p className="text-slate-500 text-sm mt-1">Live barcode scanning and rapid inventory lookups.</p>
+                </div>
+
+                <div className="bg-white rounded-3xl border border-[#EAE6DF] shadow-xl overflow-hidden mb-8">
                     <div className="p-6 md:p-8 bg-slate-900 text-white flex flex-col md:flex-row md:justify-between md:items-center gap-6 transition-colors">
                         <div>
-                            <h2 className="text-2xl font-bold flex items-center gap-2 text-indigo-400">
+                            <h2 className="text-2xl font-serif font-medium flex items-center gap-3 text-[#C9A24B]">
                                 <Scan className="w-6 h-6" />
                                 Interactive Scan Center
                             </h2>
@@ -160,16 +165,16 @@ export default function Index() {
                         <div className="flex bg-slate-800 p-1.5 rounded-xl border border-slate-700 w-full md:w-auto">
                             <button
                                 onClick={() => setScanMode('camera')}
-                                className={`flex-1 md:flex-none px-4 py-3 md:py-2 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-2 ${scanMode === 'camera' ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-400 hover:text-white'}`}
+                                className={`flex-1 md:flex-none px-4 py-3 md:py-2 rounded-lg text-xs font-semibold transition-all flex items-center justify-center gap-2 ${scanMode === 'camera' ? 'bg-[#B8874A] text-white shadow-md' : 'text-slate-400 hover:text-white'}`}
                             >
-                                <Camera className="w-3 h-3" />
+                                <Camera className="w-3.5 h-3.5" />
                                 Camera
                             </button>
                             <button
                                 onClick={() => setScanMode('machine')}
-                                className={`flex-1 md:flex-none px-4 py-3 md:py-2 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-2 ${scanMode === 'machine' ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-400 hover:text-white'}`}
+                                className={`flex-1 md:flex-none px-4 py-3 md:py-2 rounded-lg text-xs font-semibold transition-all flex items-center justify-center gap-2 ${scanMode === 'machine' ? 'bg-[#B8874A] text-white shadow-md' : 'text-slate-400 hover:text-white'}`}
                             >
-                                <Scan className="w-3 h-3" />
+                                <Scan className="w-3.5 h-3.5" />
                                 QR Machine
                             </button>
                         </div>
@@ -178,19 +183,19 @@ export default function Index() {
                     <div className="p-8">
                         {scanMode === 'camera' ? (
                             <div className="animate-in fade-in zoom-in-95 duration-500">
-                                <div id="reader" className="w-full rounded-2xl overflow-hidden border-2 border-dashed border-slate-200 bg-slate-50 min-h-[300px]"></div>
+                                <div id="reader" className="w-full rounded-2xl overflow-hidden border-2 border-dashed border-[#D9C4A1] bg-slate-50 min-h-[300px]"></div>
                                 <div className="mt-4 p-4 bg-amber-50 border border-amber-100 rounded-xl flex items-center gap-3 text-amber-700 text-xs font-medium">
-                                    <AlertCircle className="w-4 h-4" />
+                                    <AlertCircle className="w-4 h-4 shrink-0" />
                                     <span>If camera doesn't show, ensure you are on <strong>HTTPS</strong> and have granted permissions.</span>
                                 </div>
                             </div>
                         ) : (
-                            <div className="py-12 md:py-20 flex flex-col items-center justify-center border-2 border-dashed border-indigo-200 bg-indigo-50/30 rounded-2xl animate-in slide-in-from-bottom-4 duration-500">
-                                <div className="h-20 w-20 rounded-full bg-indigo-100 flex items-center justify-center mb-6 ring-8 ring-indigo-50">
-                                    <Scan className="w-10 h-10 text-indigo-600 animate-pulse" />
+                            <div className="py-12 md:py-20 flex flex-col items-center justify-center border-2 border-dashed border-[#D9C4A1] bg-[#FBF7EE]/40 rounded-2xl animate-in slide-in-from-bottom-4 duration-500">
+                                <div className="h-20 w-20 rounded-full bg-[#FBF7EE] flex items-center justify-center mb-6 ring-8 ring-[#F5EEDC]">
+                                    <Scan className="w-10 h-10 text-[#B8874A] animate-pulse" />
                                 </div>
-                                <h3 className="text-xl font-bold text-slate-800">Machine Mode Active</h3>
-                                <p className="text-slate-500 mt-2 mb-8 max-w-xs text-center">Your QR Scanner machine is ready. Point it at a barcode and pull the trigger.</p>
+                                <h3 className="text-xl font-serif font-medium text-slate-800">Machine Mode Active</h3>
+                                <p className="text-slate-500 mt-2 mb-8 max-w-xs text-center text-sm">Your QR Scanner machine is ready. Point it at a barcode and pull the trigger.</p>
 
                                 <div className="w-full max-w-md space-y-4">
                                     <div className="relative">
@@ -198,7 +203,7 @@ export default function Index() {
                                             ref={machineInputRef}
                                             onKeyDown={handleMachineScan}
                                             placeholder="Waiting for hardware scan..."
-                                            className="w-full h-16 px-6 text-xl font-bold border-indigo-200 focus:border-indigo-500 focus:ring-indigo-500 text-center rounded-2xl shadow-sm"
+                                            className="w-full h-16 px-6 text-xl font-bold border-[#EAE6DF] focus:border-[#C9A24B] focus:ring-[#C9A24B] text-center rounded-2xl shadow-sm"
                                         />
                                         <div className="absolute inset-y-0 right-4 flex items-center">
                                             <div className="h-2 w-2 rounded-full bg-emerald-500 animate-ping"></div>
@@ -207,9 +212,9 @@ export default function Index() {
                                     <div className="flex justify-center">
                                         <SecondaryButton
                                             onClick={() => triggerLookup(machineInputRef.current.input.value)}
-                                            className="px-8 h-12 bg-white text-indigo-600 border-indigo-100 hover:bg-indigo-50"
+                                            className="px-8 h-12 bg-white text-[#B8874A] border-[#D9C4A1] hover:bg-[#FBF7EE]"
                                         >
-                                            Lookup Manually
+                                            Lookup manually
                                         </SecondaryButton>
                                     </div>
                                 </div>
@@ -225,8 +230,8 @@ export default function Index() {
 
                         {isLoading && (
                             <div className="mt-6 flex flex-col items-center justify-center py-10 text-slate-400">
-                                <div className="h-10 w-10 border-4 border-indigo-600/20 border-t-indigo-600 rounded-full animate-spin mb-4"></div>
-                                <p className="font-medium">Searching catalog...</p>
+                                <div className="h-10 w-10 border-4 border-[#B8874A]/20 border-t-[#B8874A] rounded-full animate-spin mb-4"></div>
+                                <p className="font-medium text-sm">Searching catalog...</p>
                             </div>
                         )}
                     </div>
@@ -234,19 +239,19 @@ export default function Index() {
 
                 {/* Instructions */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex flex-col items-center text-center">
-                        <div className="h-10 w-10 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center mb-3">
+                    <div className="bg-white p-6 rounded-2xl border border-[#EAE6DF] shadow-sm flex flex-col items-center text-center">
+                        <div className="h-10 w-10 bg-[#FBF7EE] text-[#B8874A] rounded-xl flex items-center justify-center mb-3">
                             <span className="font-bold">1</span>
                         </div>
                         <p className="text-sm font-semibold text-slate-700">Allow Camera access when prompted</p>
                     </div>
-                    <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex flex-col items-center text-center">
+                    <div className="bg-white p-6 rounded-2xl border border-[#EAE6DF] shadow-sm flex flex-col items-center text-center">
                         <div className="h-10 w-10 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center mb-3">
                             <span className="font-bold">2</span>
                         </div>
                         <p className="text-sm font-semibold text-slate-700">Align barcode within the scanning box</p>
                     </div>
-                    <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex flex-col items-center text-center">
+                    <div className="bg-white p-6 rounded-2xl border border-[#EAE6DF] shadow-sm flex flex-col items-center text-center">
                         <div className="h-10 w-10 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center mb-3">
                             <span className="font-bold">3</span>
                         </div>
@@ -262,7 +267,7 @@ export default function Index() {
             }}>
                 {product && (
                     <div className="p-0 overflow-hidden">
-                        <div className="p-8 bg-indigo-600 text-white relative">
+                        <div className="p-8 bg-[#B8874A] text-white relative">
                             <div className="flex gap-4 items-center">
                                 {product.image_url ? (
                                     <img src={product.image_url} alt={product.name} className="w-16 h-16 rounded-xl object-cover bg-white p-1" />
@@ -273,7 +278,7 @@ export default function Index() {
                                 )}
                                 <div className="min-w-0">
                                     <div className="flex items-center gap-2 mb-1">
-                                        <p className="text-[10px] font-bold uppercase tracking-widest text-indigo-200">{product.sku}</p>
+                                        <p className="text-[10px] font-bold uppercase tracking-widest text-[#FBF7EE]">{product.sku}</p>
                                         {product.category && (
                                             <span className="text-[10px] font-bold uppercase px-2 py-0.5 bg-white/10 rounded-full border border-white/10 text-white truncate max-w-[100px]">
                                                 {product.category.name}
@@ -281,12 +286,14 @@ export default function Index() {
                                         )}
                                     </div>
                                     <h3 className="text-xl font-bold truncate leading-tight">{product.name}</h3>
-                                    <p className="text-sm font-medium text-indigo-100/80 mt-0.5 capitalize">Retail: {new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN' }).format(product.retail_price)}</p>
+                                    <p className="text-sm font-medium text-white/90 mt-0.5">
+                                        Retail: <span className="font-sans text-white/70 select-none mr-0.5">₦</span>{parseFloat(product.retail_price).toLocaleString()}
+                                    </p>
                                 </div>
                             </div>
                             <div className="absolute top-8 right-8">
                                 <div className="px-3 py-1 bg-white/10 backdrop-blur-md rounded-lg border border-white/20 flex flex-col items-center">
-                                    <span className="text-[10px] font-bold uppercase text-indigo-100">Stock</span>
+                                    <span className="text-[10px] font-bold uppercase text-[#FBF7EE]">Stock</span>
                                     <span className="text-xl font-black">{product.current_stock}</span>
                                 </div>
                             </div>
@@ -327,7 +334,7 @@ export default function Index() {
                                     <TextInput
                                         type="number"
                                         min="1"
-                                        className="w-full h-[104px] text-center text-4xl font-black rounded-xl border-slate-200 bg-slate-50 focus:bg-white focus:ring-indigo-500"
+                                        className="w-full h-[104px] text-center text-4xl font-black rounded-xl border-slate-200 bg-slate-50 focus:bg-white focus:border-[#C9A24B] focus:ring-[#C9A24B]"
                                         value={formData.quantity}
                                         onChange={(e) => setFormData({ ...formData, quantity: parseInt(e.target.value) || 0 })}
                                     />
@@ -337,7 +344,7 @@ export default function Index() {
                             <div>
                                 <InputLabel value="Movement Notes (Optional)" className="mb-2" />
                                 <textarea
-                                    className="w-full rounded-xl border-slate-200 bg-slate-50 focus:bg-white focus:ring-indigo-500 min-h-[80px]"
+                                    className="w-full rounded-xl border-slate-200 bg-slate-50 focus:bg-white focus:border-[#C9A24B] focus:ring-[#C9A24B] min-h-[80px]"
                                     placeholder="Reason for adjustment..."
                                     value={formData.notes}
                                     onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
@@ -348,9 +355,9 @@ export default function Index() {
                                 <SecondaryButton onClick={() => setIsAdjustModalOpen(false)} className="flex-1 justify-center h-12">
                                     Cancel
                                 </SecondaryButton>
-                                <PrimaryButton className="flex-1 justify-center h-12 bg-indigo-600 flex items-center gap-2">
+                                <PrimaryButton className="flex-1 justify-center h-12 bg-[#B8874A] hover:bg-[#A3743B] focus:ring-[#C9A24B] flex items-center gap-2">
                                     <CheckCircle2 className="w-5 h-5" />
-                                    Confirm Adjustment
+                                    Confirm adjustment
                                 </PrimaryButton>
                             </div>
                         </form>

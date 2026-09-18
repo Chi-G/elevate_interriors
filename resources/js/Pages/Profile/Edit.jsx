@@ -17,7 +17,7 @@ export default function Edit({ mustVerifyEmail, status }) {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                         </svg>
                     </button>
-                    <h2 className="text-xl font-bold text-slate-800 leading-tight">
+                    <h2 className="text-2xl font-serif font-medium text-[#1E1B18] tracking-tight">
                         Profile Settings
                     </h2>
                 </div>
@@ -25,11 +25,9 @@ export default function Edit({ mustVerifyEmail, status }) {
         >
             <Head title="Profile" />
 
-            <div className="py-12">
-                <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
-
-
-                    <div className="bg-white p-4 shadow sm:rounded-lg sm:p-8 border border-slate-200">
+            <div className="py-8">
+                <div className="mx-auto max-w-5xl space-y-6">
+                    <div className="bg-white p-6 sm:p-8 rounded-3xl border border-[#EAE6DF] shadow-sm">
                         <UpdateProfileInformationForm
                             mustVerifyEmail={mustVerifyEmail}
                             status={status}
@@ -37,11 +35,11 @@ export default function Edit({ mustVerifyEmail, status }) {
                         />
                     </div>
 
-                    <div className="bg-white p-4 shadow sm:rounded-lg sm:p-8 border border-slate-200">
+                    <div className="bg-white p-6 sm:p-8 rounded-3xl border border-[#EAE6DF] shadow-sm">
                         <UpdatePasswordForm className="max-w-xl" />
                     </div>
 
-                    <div className="bg-white p-4 shadow sm:rounded-lg sm:p-8 border border-slate-200">
+                    <div className="bg-white p-6 sm:p-8 rounded-3xl border border-[#EAE6DF] shadow-sm">
                         <DeleteUserForm className="max-w-xl" />
                     </div>
                 </div>

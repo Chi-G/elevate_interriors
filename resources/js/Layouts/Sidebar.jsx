@@ -85,12 +85,12 @@ export default function Sidebar({ isOpen, onClose, isCollapsed = false, onToggle
                     <button
                         type="button"
                         onClick={onToggleCollapse}
-                        className="hidden md:inline-flex items-center justify-center p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 shrink-0"
+                        className="hidden md:inline-flex items-center justify-center p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors focus:outline-none focus:ring-2 focus:ring-[#C9A24B] shrink-0"
                         title={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
                         aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
                     >
                         {isCollapsed ? (
-                            <ChevronRight className="h-5 w-5 text-indigo-400" />
+                            <ChevronRight className="h-5 w-5 text-[#C9A24B]" />
                         ) : (
                             <ChevronLeft className="h-5 w-5" />
                         )}
@@ -122,9 +122,9 @@ export default function Sidebar({ isOpen, onClose, isCollapsed = false, onToggle
                             title={isCollapsed ? item.name : undefined}
                             className={`flex items-center ${
                                 isCollapsed ? 'md:justify-center md:px-2' : 'px-3'
-                            } py-2.5 rounded-lg text-sm font-medium transition-all group ${
+                            } py-2.5 rounded-xl text-sm font-medium transition-all group ${
                                 item.active
-                                    ? 'bg-indigo-600 text-white shadow-md'
+                                    ? 'bg-[#B8874A] text-white shadow-md'
                                     : 'text-slate-400 hover:bg-slate-800/80 hover:text-white'
                             }`}
                         >
@@ -133,8 +133,8 @@ export default function Sidebar({ isOpen, onClose, isCollapsed = false, onToggle
                                     isCollapsed ? 'md:mr-0' : 'mr-3'
                                 } shrink-0 transition-colors ${
                                     item.active
-                                        ? 'text-indigo-200'
-                                        : 'text-slate-500 group-hover:text-indigo-400'
+                                        ? 'text-[#FDF6E8]'
+                                        : 'text-slate-500 group-hover:text-[#C9A24B]'
                                 }`}
                             />
                             {!isCollapsed && <span className="truncate">{item.name}</span>}
@@ -147,16 +147,16 @@ export default function Sidebar({ isOpen, onClose, isCollapsed = false, onToggle
                     <div
                         className={`flex items-center ${
                             isCollapsed ? 'md:justify-center p-1.5' : 'p-2.5'
-                        } rounded-lg bg-slate-800/60 ring-1 ring-slate-700/50 min-w-0 transition-all`}
+                        } rounded-xl bg-slate-800/60 ring-1 ring-slate-700/50 min-w-0 transition-all`}
                         title={isCollapsed ? `${user?.name} (${user?.role})` : undefined}
                     >
-                        <div className="h-9 w-9 rounded-md bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold shrink-0 shadow-sm ring-2 ring-slate-900">
+                        <div className="h-9 w-9 rounded-lg bg-gradient-to-br from-[#C9A24B] to-[#966E2E] flex items-center justify-center text-white font-bold shrink-0 shadow-sm ring-2 ring-slate-900">
                             {user?.name?.charAt(0) || '?'}
                         </div>
                         {!isCollapsed && (
                             <div className="ml-3 truncate flex-1 min-w-0">
                                 <p className="text-sm font-medium text-white truncate">{user?.name || 'User'}</p>
-                                <p className="text-xs text-indigo-300 truncate font-medium">{user?.role || 'Guest'}</p>
+                                <p className="text-xs text-[#D4B574] truncate font-medium">{user?.role || 'Guest'}</p>
                             </div>
                         )}
                     </div>

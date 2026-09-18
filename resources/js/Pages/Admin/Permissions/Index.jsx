@@ -26,27 +26,27 @@ export default function Index({ roles, permissionsByModule, matrix }) {
 
             <div className="flex flex-col sm:flex-row justify-between items-start gap-6 mb-8 px-2">
                 <div className="max-w-xl">
-                    <h1 className="text-2xl font-bold text-slate-800 flex items-center gap-2">
-                        <Lock className="w-6 h-6 text-indigo-600" />
-                        Access Control Matrix
+                    <h1 className="text-3xl font-serif font-medium text-[#1E1B18] tracking-tight flex items-center gap-3">
+                        <Lock className="w-6 h-6 text-[#B8874A]" />
+                        Role & Permissions Matrix
                     </h1>
-                    <p className="text-slate-500 mt-1 font-medium leading-relaxed">Configure exactly what each staff role can see and do across the system.</p>
+                    <p className="text-slate-500 text-sm mt-1 leading-relaxed">Configure exactly what each staff role can see and do across the system.</p>
                 </div>
                 
                 {auth.user?.role === 'Super Admin' && (
-                    <div className="bg-indigo-50 border border-indigo-100 rounded-2xl px-4 py-3 flex items-center gap-3 shadow-sm shadow-indigo-100/50 w-full sm:w-auto">
-                        <div className="h-10 w-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white shrink-0">
+                    <div className="bg-[#FBF7EE] border border-[#EAE6DF] rounded-2xl px-4 py-3 flex items-center gap-3 shadow-sm w-full sm:w-auto">
+                        <div className="h-10 w-10 rounded-xl bg-[#B8874A] flex items-center justify-center text-white shrink-0">
                             <Shield className="w-5 h-5" />
                         </div>
                         <div className="min-w-0">
-                            <p className="text-[10px] font-bold text-indigo-900 uppercase tracking-widest leading-none">Super Admin Bypass</p>
-                            <p className="text-xs text-indigo-600 font-bold mt-1">Status: Active</p>
+                            <p className="text-[10px] font-bold text-[#1E1B18] uppercase tracking-widest leading-none">Super Admin Bypass</p>
+                            <p className="text-xs text-[#B8874A] font-bold mt-1">Status: Active</p>
                         </div>
                     </div>
                 )}
             </div>
 
-            <div className="bg-white rounded-[2.5rem] border border-slate-200 shadow-sm overflow-hidden transition-all">
+            <div className="bg-white rounded-[2.5rem] border border-[#EAE6DF] shadow-sm overflow-hidden transition-all">
                 <div className="overflow-x-auto scrollbar-thin scrollbar-thumb-slate-200">
                     <table className="w-full text-left border-collapse table-fixed min-w-[600px]">
                         <thead>
@@ -57,7 +57,7 @@ export default function Index({ roles, permissionsByModule, matrix }) {
                                 {roles.map(role => (
                                     <th key={role.id} className="px-4 py-6 text-xs font-bold text-slate-800 uppercase tracking-widest text-center min-w-[120px]">
                                         <div className="flex flex-col items-center gap-1">
-                                            <span className="px-3 py-1 bg-white border border-slate-200 rounded-full text-[10px] text-slate-600 font-black shadow-sm">{role.display_name}</span>
+                                            <span className="px-3 py-1 bg-white border border-[#EAE6DF] rounded-full text-[10px] text-slate-600 font-bold shadow-sm">{role.display_name}</span>
                                         </div>
                                     </th>
                                 ))}
@@ -67,15 +67,15 @@ export default function Index({ roles, permissionsByModule, matrix }) {
                             {Object.entries(permissionsByModule).map(([module, permissions]) => (
                                 <React.Fragment key={module}>
                                     <tr className="bg-slate-50/20">
-                                        <td colSpan={roles.length + 1} className="sticky left-0 z-10 px-8 py-3 text-[10px] font-black text-indigo-600 uppercase tracking-[0.2em] bg-white/50 backdrop-blur-sm">
+                                        <td colSpan={roles.length + 1} className="sticky left-0 z-10 px-8 py-3 text-[10px] font-black text-[#B8874A] uppercase tracking-[0.2em] bg-white/50 backdrop-blur-sm">
                                             Module: {module}
                                         </td>
                                     </tr>
                                     {permissions.map((permission) => (
-                                        <tr key={permission.id} className="hover:bg-indigo-50/20 transition-colors group">
-                                            <td className="sticky left-0 z-10 bg-white/90 backdrop-blur-sm px-8 py-5 group-hover:bg-indigo-50/20 transition-colors">
+                                        <tr key={permission.id} className="hover:bg-[#FBF7EE]/30 transition-colors group">
+                                            <td className="sticky left-0 z-10 bg-white/90 backdrop-blur-sm px-8 py-5 group-hover:bg-[#FBF7EE]/30 transition-colors">
                                                 <div className="min-w-0">
-                                                    <p className="text-sm font-bold text-slate-800 group-hover:text-indigo-700 transition-colors truncate">{permission.display_name}</p>
+                                                    <p className="text-sm font-bold text-slate-800 group-hover:text-[#B8874A] transition-colors truncate">{permission.display_name}</p>
                                                     <p className="text-[10px] text-slate-400 mt-0.5 font-bold uppercase tracking-tighter opacity-60">{permission.name}</p>
                                                 </div>
                                             </td>
@@ -109,7 +109,7 @@ export default function Index({ roles, permissionsByModule, matrix }) {
 
             <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6 pb-8 px-1">
                 <div className="bg-slate-900 rounded-[2rem] p-8 text-white flex items-start gap-5 shadow-xl shadow-slate-200/20">
-                    <div className="h-12 w-12 flex-shrink-0 rounded-2xl bg-indigo-500/20 flex items-center justify-center text-indigo-400 ring-1 ring-indigo-500/30">
+                    <div className="h-12 w-12 flex-shrink-0 rounded-2xl bg-[#B8874A]/20 flex items-center justify-center text-[#C9A24B] ring-1 ring-[#B8874A]/30">
                         <Fingerprint className="w-6 h-6" />
                     </div>
                     <div>
@@ -120,8 +120,8 @@ export default function Index({ roles, permissionsByModule, matrix }) {
                     </div>
                 </div>
 
-                <div className="bg-white rounded-[2rem] p-8 border border-slate-200 flex items-start gap-5 shadow-sm">
-                    <div className="h-12 w-12 flex-shrink-0 rounded-2xl bg-slate-50 flex items-center justify-center text-slate-400 ring-1 ring-slate-100">
+                <div className="bg-white rounded-[2rem] p-8 border border-[#EAE6DF] flex items-start gap-5 shadow-sm">
+                    <div className="h-12 w-12 flex-shrink-0 rounded-2xl bg-[#FBF7EE] flex items-center justify-center text-[#B8874A] ring-1 ring-[#EAE6DF]">
                         <Info className="w-6 h-6" />
                     </div>
                     <div>

@@ -1,5 +1,5 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head, Link, useForm, usePage } from '@inertiajs/react';
+import { Head, Link, useForm, usePage, router } from '@inertiajs/react';
 import { useState, useRef } from 'react';
 import InputLabel from '@/Components/InputLabel';
 import TextInput from '@/Components/TextInput';
@@ -95,20 +95,26 @@ export default function Modify({ product = null, categories, sku_suggestion = ''
             <div className="mb-8">
                 <Link
                     href={route('products.index', { slug: auth.user.slug })}
-                    className="group flex items-center text-slate-500 hover:text-indigo-600 transition-colors text-sm font-medium"
+                    className="group inline-flex items-center text-slate-500 hover:text-[#B8874A] transition-colors text-sm font-medium mb-3"
                 >
                     <ArrowLeft className="w-4 h-4 mr-2 transition-transform group-hover:-translate-x-1" />
-                    Back to Catalog
+                    Back to catalog
                 </Link>
+                <h1 className="text-3xl font-serif font-medium text-[#1E1B18] tracking-tight">
+                    {isEditing ? 'Edit Product' : 'New Product'}
+                </h1>
+                <p className="text-slate-500 text-sm mt-1">
+                    {isEditing ? `Update details and inventory rules for ${product.name}.` : 'Add a new luxury interior item to your collection.'}
+                </p>
             </div>
 
             <form onSubmit={submit} className="max-w-5xl">
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     {/* Left Column: Core Info */}
                     <div className="lg:col-span-2 space-y-6">
-                        <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
-                            <div className="flex items-center gap-3 pb-4 border-b border-slate-50">
-                                <div className="h-10 w-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
+                        <div className="bg-white p-8 rounded-3xl border border-[#EAE6DF] shadow-sm space-y-6">
+                            <div className="flex items-center gap-3 pb-4 border-b border-slate-100">
+                                <div className="h-10 w-10 rounded-xl bg-[#FBF7EE] text-[#B8874A] flex items-center justify-center">
                                     <Box className="w-5 h-5" />
                                 </div>
                                 <h3 className="text-lg font-bold text-slate-800">Product Identity</h3>
@@ -120,7 +126,7 @@ export default function Modify({ product = null, categories, sku_suggestion = ''
                                     <div className="relative">
                                         <TextInput
                                             id="sku"
-                                            className="mt-1 block w-full bg-slate-50 border-slate-200 h-12 uppercase font-mono tracking-wider focus:bg-white"
+                                            className="mt-1 block w-full bg-slate-50 border-slate-200 h-12 uppercase font-mono tracking-wider focus:bg-white focus:border-[#C9A24B] focus:ring-[#C9A24B]"
                                             value={data.sku}
                                             onChange={(e) => setData('sku', e.target.value.toUpperCase())}
                                             required
@@ -129,7 +135,7 @@ export default function Modify({ product = null, categories, sku_suggestion = ''
                                             <button
                                                 type="button"
                                                 onClick={() => setData('sku', 'ELV-' + Math.random().toString(36).substr(2, 6).toUpperCase())}
-                                                className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold text-indigo-500 hover:text-indigo-700 bg-indigo-50 px-2 py-1 rounded"
+                                                className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-semibold text-[#B8874A] hover:text-[#A3743B] bg-[#FBF7EE] hover:bg-[#F5EEDC] px-2 py-1 rounded transition-colors"
                                             >
                                                 Regen
                                             </button>
@@ -143,7 +149,7 @@ export default function Modify({ product = null, categories, sku_suggestion = ''
                                         <InputLabel htmlFor="parent_category_id" value="Main Category" className="text-slate-500" />
                                         <select
                                             id="parent_category_id"
-                                            className="mt-1 block w-full border-slate-200 bg-slate-50 rounded-xl shadow-sm focus:border-indigo-500 focus:ring-indigo-500 h-12 text-sm font-medium text-slate-700 focus:bg-white"
+                                            className="mt-1 block w-full border-slate-200 bg-slate-50 rounded-xl shadow-sm focus:border-[#C9A24B] focus:ring-[#C9A24B] h-12 text-sm font-medium text-slate-700 focus:bg-white"
                                             value={parentCategoryId}
                                             onChange={handleParentCategoryChange}
                                             required
@@ -159,7 +165,7 @@ export default function Modify({ product = null, categories, sku_suggestion = ''
                                         <InputLabel htmlFor="category_id" value="Sub-category (Optional)" className="text-slate-500" />
                                         <select
                                             id="category_id"
-                                            className="mt-1 block w-full border-slate-200 bg-slate-50 rounded-xl shadow-sm focus:border-indigo-500 focus:ring-indigo-500 h-12 text-sm font-medium text-slate-700 focus:bg-white disabled:opacity-50"
+                                            className="mt-1 block w-full border-slate-200 bg-slate-50 rounded-xl shadow-sm focus:border-[#C9A24B] focus:ring-[#C9A24B] h-12 text-sm font-medium text-slate-700 focus:bg-white disabled:opacity-50"
                                             value={data.category_id}
                                             onChange={(e) => setData('category_id', e.target.value)}
                                             disabled={!parentCategoryId}
@@ -178,12 +184,12 @@ export default function Modify({ product = null, categories, sku_suggestion = ''
                                 <InputLabel htmlFor="name" value="Product Display Name" className="text-slate-500" />
                                 <TextInput
                                     id="name"
-                                    className="mt-1 block w-full bg-slate-50 border-slate-200 h-12 focus:bg-white text-lg font-bold"
+                                    className="mt-1 block w-full bg-slate-50 border-slate-200 h-12 focus:bg-white focus:border-[#C9A24B] focus:ring-[#C9A24B] text-lg font-bold"
                                     value={data.name}
                                     onChange={(e) => setData('name', e.target.value)}
                                     placeholder="e.g. Minimalist Velvet Armchair"
                                     required
-                                    style={{ fontSize: '12px' }}
+                                    style={{ fontSize: '14px' }}
                                 />
                                 <InputError className="mt-2" message={errors.name} />
                             </div>
@@ -192,7 +198,7 @@ export default function Modify({ product = null, categories, sku_suggestion = ''
                                 <InputLabel htmlFor="description" value="Detailed Description" className="text-slate-500" />
                                 <textarea
                                     id="description"
-                                    className="mt-1 block w-full rounded-2xl border-slate-200 bg-slate-50 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 min-h-[120px] p-4 text-slate-700 focus:bg-white transition-all"
+                                    className="mt-1 block w-full rounded-2xl border-slate-200 bg-slate-50 shadow-sm focus:border-[#C9A24B] focus:ring-[#C9A24B] min-h-[120px] p-4 text-slate-700 focus:bg-white transition-all"
                                     value={data.description}
                                     onChange={(e) => setData('description', e.target.value)}
                                     placeholder="Provide detailed information about materials, dimensions, and style..."
@@ -202,8 +208,8 @@ export default function Modify({ product = null, categories, sku_suggestion = ''
                         </div>
 
                         {/* Pricing Section */}
-                        <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
-                            <div className="flex items-center gap-3 pb-4 border-b border-slate-50">
+                        <div className="bg-white p-8 rounded-3xl border border-[#EAE6DF] shadow-sm space-y-6">
+                            <div className="flex items-center gap-3 pb-4 border-b border-slate-100">
                                 <div className="h-10 w-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
                                     <Wallet className="w-5 h-5" />
                                 </div>
@@ -214,12 +220,12 @@ export default function Modify({ product = null, categories, sku_suggestion = ''
                                 <div>
                                     <InputLabel htmlFor="cost_price" value="Cost Price (Buy)" className="text-slate-500" />
                                     <div className="relative">
-                                        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold">₦</span>
+                                        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-medium select-none">₦</span>
                                         <TextInput
                                             id="cost_price"
                                             type="number"
                                             step="0.01"
-                                            className="mt-1 block w-full bg-slate-50 border-slate-200 h-12 pl-10 focus:bg-white"
+                                            className="mt-1 block w-full bg-slate-50 border-slate-200 h-12 pl-10 focus:bg-white focus:border-[#C9A24B] focus:ring-[#C9A24B]"
                                             value={data.cost_price}
                                             onChange={(e) => setData('cost_price', e.target.value)}
                                             required
@@ -231,12 +237,12 @@ export default function Modify({ product = null, categories, sku_suggestion = ''
                                 <div>
                                     <InputLabel htmlFor="retail_price" value="Retail Price (Sell)" className="text-slate-500" />
                                     <div className="relative">
-                                        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold">₦</span>
+                                        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-medium select-none">₦</span>
                                         <TextInput
                                             id="retail_price"
                                             type="number"
                                             step="0.01"
-                                            className="mt-1 block w-full bg-slate-50 border-slate-200 h-12 pl-10 focus:bg-white font-bold text-indigo-600"
+                                            className="mt-1 block w-full bg-slate-50 border-slate-200 h-12 pl-10 focus:bg-white focus:border-[#C9A24B] focus:ring-[#C9A24B] font-bold text-[#B8874A]"
                                             value={data.retail_price}
                                             onChange={(e) => setData('retail_price', e.target.value)}
                                             required
@@ -248,10 +254,10 @@ export default function Modify({ product = null, categories, sku_suggestion = ''
                         </div>
 
                         {/* Attributes Section */}
-                        <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
-                            <div className="flex justify-between items-center pb-4 border-b border-slate-50">
+                        <div className="bg-white p-8 rounded-3xl border border-[#EAE6DF] shadow-sm space-y-6">
+                            <div className="flex justify-between items-center pb-4 border-b border-slate-100">
                                 <div className="flex items-center gap-3">
-                                    <div className="h-10 w-10 rounded-xl bg-violet-50 text-violet-600 flex items-center justify-center">
+                                    <div className="h-10 w-10 rounded-xl bg-[#FBF7EE] text-[#B8874A] flex items-center justify-center">
                                         <Tag className="w-5 h-5" />
                                     </div>
                                     <h3 className="text-lg font-bold text-slate-800">Product Specifications</h3>
@@ -259,10 +265,10 @@ export default function Modify({ product = null, categories, sku_suggestion = ''
                                 <button
                                     type="button"
                                     onClick={addAttribute}
-                                    className="text-xs font-bold text-indigo-600 hover:text-indigo-700 bg-indigo-50 px-3 py-2 rounded-lg flex items-center gap-2 transition-colors"
+                                    className="text-xs font-semibold text-[#B8874A] hover:text-[#A3743B] bg-[#FBF7EE] hover:bg-[#F5EEDC] px-3 py-2 rounded-lg flex items-center gap-2 transition-colors"
                                 >
                                     <PlusCircle className="w-4 h-4" />
-                                    Add Property
+                                    Add property
                                 </button>
                             </div>
 
@@ -306,9 +312,9 @@ export default function Modify({ product = null, categories, sku_suggestion = ''
                             </p>
                         </div>
 
-                        <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
-                            <div className="flex items-center gap-3 pb-4 border-b border-slate-50">
-                                <div className="h-10 w-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
+                        <div className="bg-white p-8 rounded-3xl border border-[#EAE6DF] shadow-sm space-y-6">
+                            <div className="flex items-center gap-3 pb-4 border-b border-slate-100">
+                                <div className="h-10 w-10 rounded-xl bg-[#FBF7EE] text-[#B8874A] flex items-center justify-center">
                                     <HelpCircle className="w-5 h-5" />
                                 </div>
                                 <h3 className="text-lg font-bold text-slate-800">Advanced Parameters</h3>
@@ -319,7 +325,7 @@ export default function Modify({ product = null, categories, sku_suggestion = ''
                                     <InputLabel htmlFor="barcode_value" value="Manual Barcode (EAN-13/UPC)" className="text-slate-500" />
                                     <TextInput
                                         id="barcode_value"
-                                        className="mt-1 block w-full bg-slate-50 border-slate-200 h-12 font-mono focus:bg-white"
+                                        className="mt-1 block w-full bg-slate-50 border-slate-200 h-12 font-mono focus:bg-white focus:border-[#C9A24B] focus:ring-[#C9A24B]"
                                         value={data.barcode_value}
                                         onChange={(e) => setData('barcode_value', e.target.value)}
                                         placeholder="Leave blank to auto-gen from SKU"
@@ -333,7 +339,7 @@ export default function Modify({ product = null, categories, sku_suggestion = ''
                                     <TextInput
                                         id="alert_threshold"
                                         type="number"
-                                        className="mt-1 block w-full bg-slate-50 border-slate-200 h-12 focus:bg-white"
+                                        className="mt-1 block w-full bg-slate-50 border-slate-200 h-12 focus:bg-white focus:border-[#C9A24B] focus:ring-[#C9A24B]"
                                         value={data.alert_threshold}
                                         onChange={(e) => setData('alert_threshold', e.target.value)}
                                         required
@@ -347,14 +353,14 @@ export default function Modify({ product = null, categories, sku_suggestion = ''
 
                     {/* Right Column: Image Upload & Preview */}
                     <div className="space-y-6">
-                        <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+                        <div className="bg-white p-6 rounded-3xl border border-[#EAE6DF] shadow-sm">
                             <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-6">Product Imagery</h3>
 
                             <div
                                 onClick={() => fileInputRef.current.click()}
                                 className={`relative rounded-2xl border-2 border-dashed transition-all cursor-pointer overflow-hidden flex flex-col items-center justify-center min-h-[320px] ${imagePreview
-                                        ? 'border-indigo-200 bg-slate-50'
-                                        : 'border-slate-200 bg-slate-50/50 hover:bg-slate-50 hover:border-indigo-400'
+                                        ? 'border-[#D9C4A1] bg-slate-50'
+                                        : 'border-slate-200 bg-slate-50/50 hover:bg-slate-50 hover:border-[#C9A24B]'
                                     }`}
                             >
                                 {imagePreview ? (
@@ -405,16 +411,16 @@ export default function Modify({ product = null, categories, sku_suggestion = ''
                             <h3 className="text-xs font-bold text-slate-500 uppercase tracking-widest">Publish Settings</h3>
                             <PrimaryButton
                                 disabled={processing}
-                                className="w-full h-12 bg-indigo-600 hover:bg-indigo-500 flex items-center justify-center gap-2 border-transparent text-sm"
+                                className="w-full h-12 bg-[#B8874A] hover:bg-[#A3743B] focus:ring-[#C9A24B] flex items-center justify-center gap-2 border-transparent text-sm"
                             >
-                                {isEditing ? 'Sync Changes' : 'Create Product'}
+                                {isEditing ? 'Save changes' : 'Create product'}
                             </PrimaryButton>
                             <SecondaryButton
                                 type="button"
                                 onClick={() => router.get(route('products.index', { slug: auth.user.slug }))}
                                 className="w-full h-12 bg-transparent text-slate-400 border-slate-800 hover:bg-slate-800 flex items-center justify-center text-sm"
                             >
-                                Discard & Exit
+                                Discard & exit
                             </SecondaryButton>
                         </div>
                     </div>

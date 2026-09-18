@@ -34,6 +34,14 @@ class Product extends Model
 
     protected $appends = ['image_url'];
 
+    /**
+     * Always normalize SKU to uppercase.
+     */
+    public function setSkuAttribute(?string $value): void
+    {
+        $this->attributes['sku'] = $value ? strtoupper(trim($value)) : null;
+    }
+
     // Removed current_stock append to favor real DB column
 
     public function category()

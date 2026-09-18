@@ -68,7 +68,7 @@ export default function Index({ suppliers }) {
             text: "This vendor and their details will be permanently removed.",
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#4f46e5',
+            confirmButtonColor: '#B8874A',
             cancelButtonColor: '#ef4444',
             confirmButtonText: 'Yes, delete it!'
         }).then((result) => {
@@ -84,24 +84,22 @@ export default function Index({ suppliers }) {
 
             <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-8">
                 <div>
-                    <h1 className="text-2xl font-bold text-slate-800">Vendors & Suppliers</h1>
-                    <p className="text-slate-500 mt-1">Manage your furniture and materials supply network.</p>
+                    <h1 className="text-3xl font-serif font-medium text-[#1E1B18] tracking-tight">Vendors & Suppliers</h1>
+                    <p className="text-slate-500 text-sm mt-1">Manage your furniture and materials supply network.</p>
                 </div>
                 {auth.can['suppliers.create'] && (
                     <PrimaryButton 
                         onClick={openCreateModal} 
-                        className="w-full md:w-auto h-11 px-6 bg-indigo-600 border-transparent hover:bg-indigo-700 flex items-center justify-center gap-2 shadow-sm transition-all active:scale-95"
+                        className="w-full md:w-auto h-11 px-6 bg-[#B8874A] border-transparent hover:bg-[#A3743B] focus:ring-2 focus:ring-[#C9A24B] flex items-center justify-center gap-2 shadow-sm transition-all text-sm"
                     >
                         <Plus className="w-5 h-5" />
-                        Add Supplier
+                        Add supplier
                     </PrimaryButton>
                 )}
             </div>
 
-
-
             {/* Desktop View - Table */}
-            <div className="hidden md:block bg-white rounded-3xl border border-slate-200 shadow-sm overflow-x-auto text-sm">
+            <div className="hidden md:block bg-white rounded-3xl border border-[#EAE6DF] shadow-sm overflow-x-auto text-sm">
                 <table className="w-full text-left border-collapse min-w-[800px] lg:min-w-full">
                     <thead>
                         <tr className="bg-slate-50/50">
@@ -117,7 +115,7 @@ export default function Index({ suppliers }) {
                             <tr key={supplier.id} className="hover:bg-slate-50/30 transition-colors group">
                                 <td className="px-6 py-6">
                                     <div className="flex items-center gap-3">
-                                        <div className="h-10 w-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-500 group-hover:bg-indigo-600 group-hover:text-white transition-all">
+                                        <div className="h-10 w-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-500 group-hover:bg-[#B8874A] group-hover:text-white transition-all">
                                             <Truck className="w-5 h-5" />
                                         </div>
                                         <div>
@@ -148,7 +146,7 @@ export default function Index({ suppliers }) {
                                             {auth.can['suppliers.edit'] && (
                                                 <button 
                                                     onClick={() => openEditModal(supplier)}
-                                                    className="h-9 w-9 flex items-center justify-center rounded-lg border border-slate-200 text-slate-400 hover:text-indigo-600 hover:border-indigo-200 hover:bg-indigo-50 transition-all"
+                                                    className="h-9 w-9 flex items-center justify-center rounded-lg border border-slate-200 text-slate-400 hover:text-[#B8874A] hover:border-[#D9C4A1] hover:bg-[#FBF7EE] transition-all"
                                                 >
                                                     <Edit className="w-4 h-4" />
                                                 </button>
@@ -173,7 +171,7 @@ export default function Index({ suppliers }) {
             {/* Mobile View - Cards */}
             <div className="md:hidden space-y-4">
                 {suppliers.map((supplier) => (
-                    <div key={supplier.id} className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm transition-all active:scale-[0.98]">
+                    <div key={supplier.id} className="bg-white p-5 rounded-3xl border border-[#EAE6DF] shadow-sm transition-all active:scale-[0.98]">
                         <div className="flex justify-between items-start mb-4">
                             <div className="flex items-center gap-3">
                                 <div className="h-10 w-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-500">
@@ -188,7 +186,7 @@ export default function Index({ suppliers }) {
                                 {auth.can['suppliers.edit'] && (
                                     <button 
                                         onClick={() => openEditModal(supplier)}
-                                        className="h-9 w-9 flex items-center justify-center rounded-lg bg-indigo-50 text-indigo-600 border border-indigo-100"
+                                        className="h-9 w-9 flex items-center justify-center rounded-lg bg-[#FBF7EE] text-[#B8874A] border border-[#EAE6DF]"
                                     >
                                         <Edit className="w-4 h-4" />
                                     </button>
@@ -205,7 +203,7 @@ export default function Index({ suppliers }) {
                         </div>
 
                         {(supplier.contact_person || supplier.email || supplier.phone) && (
-                            <div className="space-y-3 pt-4 border-t border-slate-50">
+                            <div className="space-y-3 pt-4 border-t border-slate-100">
                                 {supplier.contact_person && (
                                     <div className="flex items-center text-sm text-slate-600 gap-3">
                                         <div className="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center shrink-0">
@@ -237,22 +235,22 @@ export default function Index({ suppliers }) {
             </div>
 
             {suppliers.length === 0 && (
-                <div className="py-20 text-center bg-white rounded-3xl border border-slate-200 shadow-sm text-slate-400 italic">
+                <div className="py-20 text-center bg-white rounded-3xl border border-[#EAE6DF] shadow-sm text-slate-400 italic">
                     No suppliers registered in the system yet.
                 </div>
             )}
 
-            {/* Create/Edit Modals (combined or separate as per your style) */}
+            {/* Create/Edit Modals */}
             <Modal show={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)}>
                 <form onSubmit={handleCreate} className="p-8">
-                    <h2 className="text-xl font-bold text-slate-900 mb-6">New Vendor Register</h2>
+                    <h2 className="text-xl font-serif font-medium text-[#1E1B18] mb-6">New Vendor Register</h2>
                     
                     <div className="grid grid-cols-1 gap-5">
                         <div>
                             <InputLabel htmlFor="name" value="Company / Brand Name" />
                             <TextInput
                                 id="name"
-                                className="mt-1 block w-full h-11"
+                                className="mt-1 block w-full h-11 focus:border-[#C9A24B] focus:ring-[#C9A24B]"
                                 value={data.name}
                                 onChange={(e) => setData('name', e.target.value)}
                                 placeholder="e.g. Italian Marble Co."
@@ -266,7 +264,7 @@ export default function Index({ suppliers }) {
                                 <InputLabel htmlFor="contact_person" value="Contact Person" />
                                 <TextInput
                                     id="contact_person"
-                                    className="mt-1 block w-full h-11"
+                                    className="mt-1 block w-full h-11 focus:border-[#C9A24B] focus:ring-[#C9A24B]"
                                     value={data.contact_person}
                                     onChange={(e) => setData('contact_person', e.target.value)}
                                 />
@@ -275,7 +273,7 @@ export default function Index({ suppliers }) {
                                 <InputLabel htmlFor="phone" value="Phone Number" />
                                 <TextInput
                                     id="phone"
-                                    className="mt-1 block w-full h-11"
+                                    className="mt-1 block w-full h-11 focus:border-[#C9A24B] focus:ring-[#C9A24B]"
                                     value={data.phone}
                                     onChange={(e) => setData('phone', e.target.value)}
                                 />
@@ -287,7 +285,7 @@ export default function Index({ suppliers }) {
                             <TextInput
                                 id="email"
                                 type="email"
-                                className="mt-1 block w-full h-11"
+                                className="mt-1 block w-full h-11 focus:border-[#C9A24B] focus:ring-[#C9A24B]"
                                 value={data.email}
                                 onChange={(e) => setData('email', e.target.value)}
                             />
@@ -297,7 +295,7 @@ export default function Index({ suppliers }) {
 
                     <div className="mt-10 flex justify-end gap-3">
                         <SecondaryButton onClick={() => setIsCreateModalOpen(false)}>Cancel</SecondaryButton>
-                        <PrimaryButton disabled={processing} className="bg-slate-900 h-11 px-8">Save Vendor</PrimaryButton>
+                        <PrimaryButton disabled={processing} className="bg-[#B8874A] hover:bg-[#A3743B] focus:ring-[#C9A24B] h-11 px-8">Create supplier</PrimaryButton>
                     </div>
                 </form>
             </Modal>
@@ -305,14 +303,14 @@ export default function Index({ suppliers }) {
             {/* Edit Modal */}
             <Modal show={isEditModalOpen} onClose={() => setIsEditModalOpen(false)}>
                 <form onSubmit={handleEdit} className="p-8">
-                    <h2 className="text-xl font-bold text-slate-900 mb-6 font-display">Update Vendor Details</h2>
+                    <h2 className="text-xl font-serif font-medium text-[#1E1B18] mb-6">Update Vendor Details</h2>
                     
                     <div className="grid grid-cols-1 gap-5">
                         <div>
                             <InputLabel htmlFor="edit_name" value="Company Name" />
                             <TextInput
                                 id="edit_name"
-                                className="mt-1 block w-full h-11"
+                                className="mt-1 block w-full h-11 focus:border-[#C9A24B] focus:ring-[#C9A24B]"
                                 value={data.name}
                                 onChange={(e) => setData('name', e.target.value)}
                                 required
@@ -324,7 +322,7 @@ export default function Index({ suppliers }) {
                                 <InputLabel htmlFor="edit_contact" value="Contact Person" />
                                 <TextInput
                                     id="edit_contact"
-                                    className="mt-1 block w-full h-11"
+                                    className="mt-1 block w-full h-11 focus:border-[#C9A24B] focus:ring-[#C9A24B]"
                                     value={data.contact_person}
                                     onChange={(e) => setData('contact_person', e.target.value)}
                                 />
@@ -333,7 +331,7 @@ export default function Index({ suppliers }) {
                                 <InputLabel htmlFor="edit_phone" value="Phone" />
                                 <TextInput
                                     id="edit_phone"
-                                    className="mt-1 block w-full h-11"
+                                    className="mt-1 block w-full h-11 focus:border-[#C9A24B] focus:ring-[#C9A24B]"
                                     value={data.phone}
                                     onChange={(e) => setData('phone', e.target.value)}
                                 />
@@ -345,7 +343,7 @@ export default function Index({ suppliers }) {
                             <TextInput
                                 id="edit_email"
                                 type="email"
-                                className="mt-1 block w-full h-11"
+                                className="mt-1 block w-full h-11 focus:border-[#C9A24B] focus:ring-[#C9A24B]"
                                 value={data.email}
                                 onChange={(e) => setData('email', e.target.value)}
                             />
@@ -354,7 +352,7 @@ export default function Index({ suppliers }) {
 
                     <div className="mt-10 flex justify-end gap-3">
                         <SecondaryButton onClick={() => setIsEditModalOpen(false)}>Cancel</SecondaryButton>
-                        <PrimaryButton disabled={processing} className="bg-indigo-600 h-11 px-8 border-transparent">Update Supplier</PrimaryButton>
+                        <PrimaryButton disabled={processing} className="bg-[#B8874A] hover:bg-[#A3743B] focus:ring-[#C9A24B] h-11 px-8 border-transparent">Save changes</PrimaryButton>
                     </div>
                 </form>
             </Modal>
