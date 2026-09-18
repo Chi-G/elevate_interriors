@@ -228,7 +228,7 @@ export default function Login({ status, canResetPassword }) {
                 type="email"
                 value={data.email}
                 autoComplete="username"
-                placeholder="admin@elevateinteriors.space"
+                placeholder="elevateinteriors.space@gmail.com"
                 onChange={(e) => setData('email', e.target.value)}
                 className="w-full rounded-xl border border-[#E7E2D8] bg-[#F7F5EF] px-4 py-3 font-sans text-[1rem] font-normal text-[#211E1A] placeholder:text-[#B4AD9B] focus:outline-none focus:ring-2 focus:ring-[#C9A24B]/60 focus:border-[#C9A24B] transition"
                 required

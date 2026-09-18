@@ -2,12 +2,14 @@
 
 namespace App\Providers;
 
+use App\Models\Permission;
+use Illuminate\Auth\Notifications\ResetPassword;
+use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\Gate;
-use App\Models\Permission;
-use Illuminate\Support\Facades\Schema;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,9 +21,9 @@ class AppServiceProvider extends ServiceProvider
         if (config('app.env') === 'production') {
             // Use the URL from the environment configuration (Laravel Cloud or Hostinger .env)
             $url = config('app.url');
-            
+
             // Fix for host detection in potential subdirectory deployments
-            $this->app->bind('path.public', function() {
+            $this->app->bind('path.public', function () {
                 return base_path('public');
             });
 
@@ -48,7 +50,7 @@ class AppServiceProvider extends ServiceProvider
                 URL::forceRootUrl($url);
             }
             URL::forceScheme('https');
-            
+
             // Inject asset URL for Vite manifest resolution
             if ($url) {
                 putenv("VITE_ASSET_URL=$url");
@@ -57,7 +59,7 @@ class AppServiceProvider extends ServiceProvider
         }
 
         // --- DYNAMIC PERMISSION SYSTEM ---
-        
+
         // 1. Super Admin Bypass (God Mode)
         Gate::before(function ($user, $ability) {
             return $user->role === 'Super Admin' ? true : null;
@@ -76,5 +78,21 @@ class AppServiceProvider extends ServiceProvider
         } catch (\Exception $e) {
             // Silently fail if DB is not ready (e.g., during build or migrations)
         }
+
+        // 3. Custom branded Password Reset Email
+        ResetPassword::toMailUsing(function (object $notifiable, string $token) {
+            $resetUrl = url(route('password.reset', [
+                'token' => $token,
+                'email' => $notifiable->getEmailForPasswordReset(),
+            ], false));
+
+            return (new MailMessage)
+                ->subject('Reset Your Password - Elevate Interiors')
+                ->view('emails.reset-password', [
+                    'notifiable' => $notifiable,
+                    'resetUrl' => $resetUrl,
+                    'token' => $token,
+                ]);
+        });
     }
 }

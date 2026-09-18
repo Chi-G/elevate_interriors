@@ -43,7 +43,7 @@ class UserVisibilityTest extends TestCase
 
         $admin = User::create([
             'name' => 'General Admin',
-            'email' => 'admin@elevateinteriors.space',
+            'email' => 'elevateinteriors.space@gmail.com',
             'password' => bcrypt('admin@elevateinteriors$space'),
             'role' => 'Admin',
             'role_id' => $adminRole->id,
@@ -75,7 +75,7 @@ class UserVisibilityTest extends TestCase
 
         $admin = User::create([
             'name' => 'General Admin',
-            'email' => 'admin@elevateinteriors.space',
+            'email' => 'elevateinteriors.space@gmail.com',
             'password' => bcrypt('admin@elevateinteriors$space'),
             'role' => 'Admin',
             'role_id' => $adminRole->id,
@@ -88,7 +88,7 @@ class UserVisibilityTest extends TestCase
         $response->assertInertia(fn ($page) => $page
             ->component('Users/Index')
             ->has('users', 1)
-            ->where('users.0.email', 'admin@elevateinteriors.space')
+            ->where('users.0.email', 'elevateinteriors.space@gmail.com')
         );
     }
 
@@ -107,7 +107,7 @@ class UserVisibilityTest extends TestCase
 
         $admin = User::create([
             'name' => 'General Admin',
-            'email' => 'admin@elevateinteriors.space',
+            'email' => 'elevateinteriors.space@gmail.com',
             'password' => bcrypt('admin@elevateinteriors$space'),
             'role' => 'Admin',
             'role_id' => $adminRole->id,
@@ -129,7 +129,7 @@ class UserVisibilityTest extends TestCase
 
         $admin = User::create([
             'name' => 'General Admin',
-            'email' => 'admin@elevateinteriors.space',
+            'email' => 'elevateinteriors.space@gmail.com',
             'password' => bcrypt('admin@elevateinteriors$space'),
             'role' => 'Admin',
             'role_id' => $adminRole->id,
@@ -161,7 +161,7 @@ class UserVisibilityTest extends TestCase
 
         User::create([
             'name' => 'General Admin',
-            'email' => 'admin@elevateinteriors.space',
+            'email' => 'elevateinteriors.space@gmail.com',
             'password' => bcrypt('admin@elevateinteriors$space'),
             'role' => 'Admin',
             'role_id' => $adminRole->id,
@@ -193,7 +193,7 @@ class UserVisibilityTest extends TestCase
 
         $admin = User::create([
             'name' => 'General Admin',
-            'email' => 'admin@elevateinteriors.space',
+            'email' => 'elevateinteriors.space@gmail.com',
             'password' => bcrypt('admin@elevateinteriors$space'),
             'role' => 'Admin',
             'role_id' => $adminRole->id,
@@ -236,7 +236,7 @@ class UserVisibilityTest extends TestCase
 
         $admin = User::create([
             'name' => 'General Admin',
-            'email' => 'admin@elevateinteriors.space',
+            'email' => 'elevateinteriors.space@gmail.com',
             'password' => bcrypt('admin@elevateinteriors$space'),
             'role' => 'Admin',
             'role_id' => $adminRole->id,

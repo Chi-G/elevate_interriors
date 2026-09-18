@@ -23,9 +23,12 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // 2. General Admin
+        // 2. General Admin (Migrate old email if it exists)
+        User::where('email', 'admin@elevateinteriors.space')
+            ->update(['email' => 'elevateinteriors.space@gmail.com']);
+
         User::updateOrCreate(
-            ['email' => 'admin@elevateinteriors.space'],
+            ['email' => 'elevateinteriors.space@gmail.com'],
             [
                 'name' => 'General Admin',
                 'role' => 'Admin',
@@ -46,7 +49,7 @@ class DatabaseSeeder extends Seeder
         // Remove all other users from the database
         $retainedEmails = [
             'chijindu.nwokeohuru@gmail.com',
-            'admin@elevateinteriors.space',
+            'elevateinteriors.space@gmail.com',
             'drmanley@elevateinteriors.space',
         ];
 

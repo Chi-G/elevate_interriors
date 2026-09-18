@@ -17,15 +17,25 @@ export default function Modify({ product = null, categories, sku_suggestion = ''
     // Hierarchy state
     const [parentCategoryId, setParentCategoryId] = useState(() => {
         if (!product?.category_id) return '';
-        const currentCat = categories.find(c => c.id === product.category_id);
-        return currentCat?.parent_id || currentCat?.id || '';
+        // 1. Direct check on product.category loaded with parent
+        if (product.category) {
+            return String(product.category.parent_id || product.category.id || '');
+        }
+        // 2. Fallback: Search across root categories and their nested children
+        for (const cat of categories) {
+            if (String(cat.id) === String(product.category_id)) return String(cat.id);
+            if (cat.children?.some(child => String(child.id) === String(product.category_id))) {
+                return String(cat.id);
+            }
+        }
+        return '';
     });
 
     const { data, setData, post, processing, errors, transform } = useForm({
         sku: product?.sku || sku_suggestion,
         name: product?.name || '',
         description: product?.description || '',
-        category_id: product?.category_id || '',
+        category_id: product?.category_id ? String(product.category_id) : '',
         barcode_value: product?.barcode_value || '',
         alert_threshold: product?.alert_threshold || 10,
         cost_price: product?.cost_price || 0,
@@ -36,7 +46,7 @@ export default function Modify({ product = null, categories, sku_suggestion = ''
     });
 
     const mainCategories = categories;
-    const selectedParentCat = categories.find(c => c.id == parentCategoryId);
+    const selectedParentCat = categories.find(c => String(c.id) === String(parentCategoryId));
     const subCategories = selectedParentCat ? selectedParentCat.children : [];
 
     const handleParentCategoryChange = (e) => {
@@ -275,40 +285,61 @@ export default function Modify({ product = null, categories, sku_suggestion = ''
                             <div className="space-y-4">
                                 {data.attributes.length === 0 && (
                                     <div className="py-8 text-center bg-slate-50 rounded-2xl border border-dashed border-slate-200">
-                                        <p className="text-sm text-slate-400">No custom properties defined (Size, Color, etc.)</p>
+                                        <p className="text-sm text-slate-400">No custom specifications added yet</p>
+                                        <p className="text-xs text-slate-400 mt-1">Click &ldquo;Add property&rdquo; to define dimensions, materials, sizes, or weights.</p>
                                     </div>
                                 )}
 
-                                {data.attributes.map((attr, index) => (
-                                    <div key={index} className="flex gap-4 animate-in fade-in slide-in-from-left-2 transition-all">
-                                        <div className="flex-1">
-                                            <TextInput
-                                                className="w-full bg-slate-50 border-slate-200 h-11"
-                                                value={attr.key}
-                                                onChange={(e) => updateAttribute(index, 'key', e.target.value)}
-                                                placeholder="Label (e.g. Size)"
-                                            />
-                                        </div>
-                                        <div className="flex-1">
-                                            <TextInput
-                                                className="w-full bg-slate-50 border-slate-200 h-11"
-                                                value={attr.value}
-                                                onChange={(e) => updateAttribute(index, 'value', e.target.value)}
-                                                placeholder="Value (e.g. King-Size)"
-                                            />
-                                        </div>
-                                        <button
-                                            type="button"
-                                            onClick={() => removeAttribute(index)}
-                                            className="p-2 text-slate-300 hover:text-red-500 rounded-lg hover:bg-red-50 transition-colors"
-                                        >
-                                            <MinusCircle className="w-5 h-5" />
-                                        </button>
+                                {data.attributes.length > 0 && (
+                                    <div className="flex gap-4 px-1 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                                        <div className="flex-1">Property Name</div>
+                                        <div className="flex-1">Measurement / Specification</div>
+                                        <div className="w-9" />
                                     </div>
-                                ))}
+                                )}
+
+                                {data.attributes.map((attr, index) => {
+                                    const specPlaceholders = [
+                                        { key: 'Property (e.g. Dimensions)', value: 'Value (e.g. 220cm × 95cm × 85cm)' },
+                                        { key: 'Property (e.g. Size)', value: 'Value (e.g. 3-Seater / King)' },
+                                        { key: 'Property (e.g. Material)', value: 'Value (e.g. Top-Grain Leather, Oak)' },
+                                        { key: 'Property (e.g. Diameter / Height)', value: 'Value (e.g. 90cm / 180cm)' },
+                                        { key: 'Property (e.g. Weight)', value: 'Value (e.g. 14 kg)' },
+                                        { key: 'Property (e.g. Finish / Color)', value: 'Value (e.g. Brushed Antique Brass)' },
+                                    ];
+                                    const placeholder = specPlaceholders[index % specPlaceholders.length];
+
+                                    return (
+                                        <div key={index} className="flex gap-4 animate-in fade-in slide-in-from-left-2 transition-all">
+                                            <div className="flex-1">
+                                                <TextInput
+                                                    className="w-full bg-slate-50 border-slate-200 h-11"
+                                                    value={attr.key}
+                                                    onChange={(e) => updateAttribute(index, 'key', e.target.value)}
+                                                    placeholder={placeholder.key}
+                                                />
+                                            </div>
+                                            <div className="flex-1">
+                                                <TextInput
+                                                    className="w-full bg-slate-50 border-slate-200 h-11"
+                                                    value={attr.value}
+                                                    onChange={(e) => updateAttribute(index, 'value', e.target.value)}
+                                                    placeholder={placeholder.value}
+                                                />
+                                            </div>
+                                            <button
+                                                type="button"
+                                                onClick={() => removeAttribute(index)}
+                                                className="p-2 text-slate-300 hover:text-red-500 rounded-lg hover:bg-red-50 transition-colors"
+                                            >
+                                                <MinusCircle className="w-5 h-5" />
+                                            </button>
+                                        </div>
+                                    );
+                                })}
                             </div>
-                            <p className="text-[10px] text-slate-400 uppercase font-bold tracking-widest">
-                                Useful for filtering and technical sheets (Material, Dimensions, weight etc.)
+                            <p className="text-[11px] text-slate-400 font-medium">
+                                Specify key physical metrics such as Dimensions (L × W × H), Material, Seating/Bed Size, or Weight for customer product sheets.
                             </p>
                         </div>
 
@@ -322,7 +353,7 @@ export default function Modify({ product = null, categories, sku_suggestion = ''
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
-                                    <InputLabel htmlFor="barcode_value" value="Manual Barcode (EAN-13/UPC)" className="text-slate-500" />
+                                    <InputLabel htmlFor="barcode_value" value="Manual Barcode (ELV-13/UPC)" className="text-slate-500" />
                                     <TextInput
                                         id="barcode_value"
                                         className="mt-1 block w-full bg-slate-50 border-slate-200 h-12 font-mono focus:bg-white focus:border-[#C9A24B] focus:ring-[#C9A24B]"
@@ -359,8 +390,8 @@ export default function Modify({ product = null, categories, sku_suggestion = ''
                             <div
                                 onClick={() => fileInputRef.current.click()}
                                 className={`relative rounded-2xl border-2 border-dashed transition-all cursor-pointer overflow-hidden flex flex-col items-center justify-center min-h-[320px] ${imagePreview
-                                        ? 'border-[#D9C4A1] bg-slate-50'
-                                        : 'border-slate-200 bg-slate-50/50 hover:bg-slate-50 hover:border-[#C9A24B]'
+                                    ? 'border-[#D9C4A1] bg-slate-50'
+                                    : 'border-slate-200 bg-slate-50/50 hover:bg-slate-50 hover:border-[#C9A24B]'
                                     }`}
                             >
                                 {imagePreview ? (
